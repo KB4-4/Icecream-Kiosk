@@ -7,5 +7,5 @@ public interface DBProperties {
    String URL="jdbc:oracle:thin:@localhost:1521:XE";
    String USER_ID="scott";
    String USER_PASS="TIGER";
-   
+   //fdfdj
 }
