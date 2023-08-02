@@ -8,12 +8,16 @@ public class OrderDTO {
 	
 	public OrderDTO() {}
 	
-	public OrderDTO(int orderNo, int memberNo, String orderDate, int payment) {
+	public OrderDTO(int orderNo, String orderDate, int payment) {
 		super();
 		this.orderNo = orderNo;
-		this.memberNo = memberNo;
 		this.orderDate = orderDate;
 		this.payment = payment;
+	}
+	
+	public OrderDTO(int orderNo, int memberNo, String orderDate, int payment) {
+		this(orderNo, orderDate, payment);
+		this.memberNo = memberNo;
 	}
 
 	public int getOrderNo() {
