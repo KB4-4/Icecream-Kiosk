@@ -153,7 +153,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 	@Override
 	public int calcPoint(int pay) throws SQLException {
 		int memId = Session.getInstance().getMember_no();
-		int point = 0;
+		double point = 0;
 		
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -167,13 +167,13 @@ public class PaymentDAOImpl implements PaymentDAO {
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				point = pay * rs.getInt("rate");
+				point = pay * rs.getDouble("rate");
 			}
 		} finally {
 			DBManager.releaseConnection(conn, ps, rs);
 		}
 		
-		return point;
+		return (int)point;
 	}
 
 	
