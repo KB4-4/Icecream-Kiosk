@@ -57,9 +57,11 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		List<OrderDTO> list = new ArrayList<>();
+		int totalSales = 0;
 		// 3. 1년 동안의 매출 (기본)
 		int viewDays = 365;
+		int addPayment = 0;
+		
 		// 1. 하루 동안의 매출
 		if (period == 1) {
 			viewDays = 1;
@@ -67,21 +69,57 @@ public class ManagerDAOImpl implements ManagerDAO {
 		} else if (period == 2) {
 			viewDays = 7;
 		}
-		
-		String sql="select sum(payment) "
-				+ "from (select order_no, member_no, order_date, payment from orders "
-				+ "where order_date > sysdate - ? "
+		String sql="select sum(payment)\r\n"
+				+ "from (select order_no, member_no, order_date, payment from orders\r\n"
+				+ "where order_date > sysdate - ?\r\n"
 				+ "order by order_date desc)";
 		// ?  viewDays
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, viewDays);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				addPayment = rs.getInt("sum(payment)");
+				totalSales += addPayment;
+			}
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			throw new SearchWrongException("지정한 기간에 대한 게시물 검색에 오류가 발생했습니다.");
+		} finally {
+			DBManager.releaseConnection(con, ps, rs);
+		}
+		return totalSales;
 	}
 
 	@Override // 3. 모든 아이템 검색
-	public ItemDTO selectItemAll() throws SearchWrongException {
+	public List<ItemDTO> selectItemAll() throws SearchWrongException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		ItemDTO itemDTO = null;
-		String sql= "select item_no, item_name, price, stock, info from items";
+		List<ItemDTO> list = new ArrayList<>();
+		String sql= "select item_no, item_name, price, stock, info from item";
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int itemNO = rs.getInt("item_no");
+				String itemName = rs.getString("item_name");
+				int price = rs.getInt("price");
+				int stock = rs.getInt("stock");
+				String info = rs.getString("info");
+				
+				ItemDTO itemDto = new ItemDTO(itemNO, itemName, price, stock, info);
+				list.add(itemDto);
+			}
+		} catch (SQLException e) {
+			//	e.printStackTrace();
+			throw new SearchWrongException("전체 아이스크림 검색에 오류가 발생했습니다.");
+		} finally {
+			DBManager.releaseConnection(con, ps, rs);
+		}
+		return list;
 	}
 	
 	@Override // 4. 인기 아이템 검색(top3)
@@ -90,8 +128,8 @@ public class ManagerDAOImpl implements ManagerDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<ItemDTO> list = new ArrayList<>();
-		String sql = "select item_name from items "
-				+ "where item_no = "
+		String sql = "select item_name from item "
+				+ "where item_no in "
 				+ "(select item_no from "
 				+ "(select item_no from order_detail group by item_no order by sum(qty) desc) "
 				+ "where rownum <= 3)";
@@ -102,7 +140,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="insert into items (item_no, item_name, price, stock, info) "
+		String sql="insert into item (item_no, item_name, price, stock, info) "
 				+ "values (?, ?, ?, ?, ?)";
 		// 1. itemDTO.getItemNo();
 		// 2. itemDTO.getItemName();
@@ -116,7 +154,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="delete from items where item_name = ?";
+		String sql="delete from item where item_name = ?";
 		// ? itemName
 	}
 
@@ -125,7 +163,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="update items set stock = ? where item_no = ? ";
+		String sql="update item set stock = ? where item_no = ? ";
 	}
 
 	@Override // 8. 전체 멤버 검색
