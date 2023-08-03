@@ -7,6 +7,7 @@ import app.mvc.dao.ManagerDAOImpl;
 import app.mvc.dto.ItemDTO;
 import app.mvc.dto.MemberDTO;
 import app.mvc.dto.OrderDTO;
+import app.mvc.exception.DMLException;
 import app.mvc.exception.SearchWrongException;
 
 public class ManagerServiceImpl implements ManagerService {
@@ -48,27 +49,39 @@ public class ManagerServiceImpl implements ManagerService {
 	}
 
 	@Override
-	public List<itemDTO> selectItemTop3() throws SearchWrongException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> selectItemTop3() throws SearchWrongException {
+		List<String> list = managerDao.selectItemTop3();
+		if (list.isEmpty()) {
+			throw new SearchWrongException("Top3 아이스크림 정보가 없습니다.");
+		}
+		return list;
 	}
 
 	@Override
 	public int insertItem(ItemDTO itemDTO) throws DMLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = managerDao.insertItem(itemDTO);
+		if (result == 0) {
+			throw new SearchWrongException("아이스크림이 추가되지 않았습니다.");
+		}
+		return result;
 	}
 
 	@Override
 	public int deleteItemByItemName(String itemName) throws DMLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = managerDao.deleteItemByItemName(itemName);
+		if (result == 0) {
+			throw new SearchWrongException(itemName + "아이스크림이 삭제되지 않았습니다.");
+		}
+		return result;
 	}
 
 	@Override
 	public int updateItemStock(ItemDTO itemDTO) throws DMLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = managerDao.updateItemStock(itemDTO);
+		if (result == 0) {
+			throw new DMLException(itemDTO.getItemName() + " 아이스크림 재고가 수정되지 않았습니다.^^");
+		}
+		return result;
 	}
 
 	@Override
