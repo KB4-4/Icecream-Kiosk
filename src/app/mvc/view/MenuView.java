@@ -1,10 +1,11 @@
 package app.mvc.view;
-
-import java.util.Scanner;
-
+import app.mvc.controller.CartController;
 import app.mvc.controller.LoginController;
 import app.mvc.session.Session;
 import app.mvc.controller.CartController;
+
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class MenuView {
 	static Scanner sc = new Scanner(System.in);
@@ -35,34 +36,36 @@ public class MenuView {
 	}
 
 
-		public static void printUserMenu(int memberNo) {
-			while(true) {
+    public static void printUserMenu(int memberNo) {
+        while(true) {
 //            Session ss = Session.getInstance();
 //            System.out.println(ss.getSet());
+			if (Session.getInstance().getMember_no() == memberNo) {
 
-				System.out.println("-----" +memberNo+ " 로그인 중 -----");
+				System.out.println("-----" + memberNo + " 로그인 중 -----");
 				System.out.println(" 1.장바구니 보기 | 2.장바구니 추가 | 3.장바구니 수정 | 4.결제 | 5.종료 ");
-				int menu =Integer.parseInt(sc.nextLine());
-				switch(menu) {
-					case 1 :
+				int menu = Integer.parseInt(sc.nextLine());
+				switch (menu) {
+					case 1:
 						viewCart(memberNo);
 						break;
-					case 2 :
+					case 2:
 						MenuView.putCart(memberNo);//
 						break;
-					case 3 :
+					case 3:
 						//장바구니 수정 어디에 만들어야 할까?
 						break;
-					case 4 :
+					case 4:
 						//결제는 어디에 만들어야 할까?
 						//OrderController.selectOrdersByMemberNo(memberNo);
 						break;
-					case 5 :
+					case 5:
 						System.exit(0);
 				}
 			}
-
 		}
+
+    }
 
 	//메소드 모음
 
@@ -92,6 +95,7 @@ public class MenuView {
 	 */
 	public static void logout(String member_no) {
 		Session.getInstance().setMember_no(0); //수정 필요!!!!!!!!
+		Session.getInstance().setCart(new HashMap<>());
 	}
 
 //    /**
@@ -131,7 +135,7 @@ public class MenuView {
      * 장바구니 보기
      * */
     public static void viewCart(int memberNo) {
-        //CartController.viewCart(id);
+        CartController.viewCart(memberNo);
 
 
 
