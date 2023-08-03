@@ -4,11 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Session {
+
+    private static Session instance = new Session();
+
+    private Session() {}
+    public static Session getInstance(){
+        return instance;
+    }
+
     private int member_no;	// int member_no
     private Map<Integer,Integer> cart; //장바구니	// key= item_no, value = int 수량
 
-
-    public Session() {}
     public Session(int  member_no) {
         this.member_no = member_no;
         cart = new HashMap<>();
