@@ -5,8 +5,8 @@ import java.util.List;
 import app.mvc.dto.ItemDTO;
 import app.mvc.dto.MemberDTO;
 import app.mvc.dto.OrderDTO;
+import app.mvc.exception.DMLException;
 import app.mvc.exception.SearchWrongException;
-import exception.DMLException;
 
 public interface ManagerDAO {
 	// 주문 관리
@@ -32,7 +32,7 @@ public interface ManagerDAO {
 	/**
 	 *  4. 인기 아이템 검색(top3)
 	 */
-	List<itemDTO> selectItemTop3() throws SearchWrongException;
+	List<String> selectItemTop3() throws SearchWrongException;
 	
 	/**
 	 * 5. 아이템 추가
