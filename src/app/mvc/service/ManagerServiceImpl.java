@@ -31,14 +31,20 @@ public class ManagerServiceImpl implements ManagerService {
 
 	@Override
 	public int selectTotalSalesByPeriod(int period) throws SearchWrongException {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = managerDao.selectTotalSalesByPeriod(period);
+		if (result == 0) {
+			throw new SearchWrongException("해당기간 동안 주문 정보가 없습니다.");
+		}
+		return result;
 	}
 
 	@Override
-	public ItemDTO selectItemAll() throws SearchWrongException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ItemDTO> selectItemAll() throws SearchWrongException {
+		List<ItemDTO> list = managerDao.selectItemAll();
+		if (list.isEmpty()) {
+			throw new SearchWrongException("아이스크림 정보가 없습니다.");
+		}
+		return list;
 	}
 
 	@Override
