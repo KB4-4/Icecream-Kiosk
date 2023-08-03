@@ -3,6 +3,7 @@ package app.mvc.controller;
 import app.mvc.exception.SearchWrongException;
 import app.mvc.service.PaymentService;
 import app.mvc.service.PaymentServiceImpl;
+import app.mvc.session.Session;
 import app.mvc.view.FailView;
 import app.mvc.view.SuccessView;
 
@@ -40,11 +41,13 @@ public class PaymentController {
 			if(choice == 1) {
 				paymentService.payByCredit();
 				SuccessView.messagePrint("결제가 완료 되었습니다.");
+				PaymentController.selectOrderNo(Session.getInstance().getMember_no());
 			}
 			//포인트 결제
 			else if(choice == 2) {
 				paymentService.payByPoint();
 				SuccessView.messagePrint("결제가 완료 되었습니다.");
+				PaymentController.selectOrderNo(Session.getInstance().getMember_no());
 			}
 			else {
 				FailView.errorMessage("잘못된 입력입니다.");

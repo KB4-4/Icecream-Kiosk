@@ -49,29 +49,4 @@ public interface ManagerDAO {
 	 */
 	int updateItemStock(ItemDTO itemDTO) throws DMLException;
 	
-	// 멤버 관리
-	/**
-	 * 8. 전체 멤버 검색
-	 */
-	List<MemberDTO> selectMemberAll() throws SearchWrongException;
-	
-	/**
-	 * 9. 전화번호로 해당하는 멤버 검색
-	 */
-	MemberDTO selectMemberByPhone(String phone) throws SearchWrongException;
-	
-	/**
-	 * 10. 멤버 추가
-	 */
-	int insertMember(MemberDTO memberdto) throws DMLException;
-	
-	/**
-	 * 11. 전화번호로 해당하는 멤버 삭제
-	 */
-	int deleteMemberByPhone(String phone) throws DMLException;
-	
-	/**
-	 * 12. 멤버 등급 수정
-	 */
-	int updateMemberGrade() throws DMLException;
 }

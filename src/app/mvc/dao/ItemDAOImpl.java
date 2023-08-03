@@ -11,47 +11,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAOImpl implements ItemDAO {
+	private static ItemDAO instance = new ItemDAOImpl();
 
-//    @Override
-//    public List<ItemDTO> cartSelect() throws SQLException {
-//        Connection con=null;
-//        PreparedStatement ps=null;
-//        ResultSet rs=null;
-//        List<ItemDTO> list = new ArrayList<>();
-//        String sql = "select * from item order by item_no";
-//        try {
-//            con = DBManager.getConnection();
-//            ps= con.prepareStatement(sql);
-//            rs = ps.executeQuery();
-//
-//            while(rs.next()) {
-//                ItemDTO item  = new ItemDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5));
-//                list.add(item);
-//            }
-//        }finally {
-//            DBManager.releaseConnection(con, ps, rs);
-//        }
-//        return list;
-//    }
+	private ItemDAOImpl() {
+	}
 
-    @Override
-    public ItemDTO itemsSelectByItemsId(int itemNo) throws SQLException {
-        Connection con=null;
-        PreparedStatement ps=null;
-        ResultSet rs=null;
-        ItemDTO item =null;
-        try {
-            con = DBManager.getConnection();
-            ps= con.prepareStatement("select * from item where item_no = ?");
-            ps.setInt(1, itemNo);
-            rs = ps.executeQuery();
+	public static ItemDAO getInstance() {
+		return instance;
+	}
+	
+	@Override
+	public List<ItemDTO> getItems() throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<ItemDTO> list = new ArrayList<>();
+		String sql = "select * from item";
 
-            if(rs.next()) {
-                item  = new ItemDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5));
-            }
-        }finally {
-            DBManager.releaseConnection(con, ps, rs);
-        }
-        return item;
-    }
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				ItemDTO itemDto = new ItemDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5));
+				list.add(itemDto);
+			}
+		} catch (SQLException e) {
+			throw new SQLException();
+		} finally {
+			DBManager.releaseConnection(con, ps, rs);
+		}
+		return list;
+	}
+
+	@Override
+	public ItemDTO itemsSelectByItemsId(int itemNo) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		ItemDTO item = null;
+		String sql = "select * from item where item_no = ?";
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, itemNo);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				item = new ItemDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5));
+			}
+		} finally {
+			DBManager.releaseConnection(con, ps, rs);
+		}
+		return item;
+	}	
+	
 }

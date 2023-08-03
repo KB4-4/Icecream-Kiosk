@@ -6,13 +6,20 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ItemDAO {
-//    /**
-//     * 전체 상품
-//     * */
-//    List<ItemDTO> cartSelect() throws SQLException;
-
-    /**
-     * goodsId에 해당하는 정보 검색
-     * */
-    ItemDTO itemsSelectByItemsId(int itemId) throws SQLException;
+	/**
+	 * 메뉴 출력하기
+	 * @return
+	 * @throws Exception
+	 */
+	List<ItemDTO> getItems() throws SQLException;
+	
+	/**
+	 * goodsId에 해당하는 정보 검색
+	 * @param itemId
+	 * @return
+	 * @throws SQLException
+	 */
+	ItemDTO itemsSelectByItemsId(int itemId) throws SQLException;
+	
+	
 }

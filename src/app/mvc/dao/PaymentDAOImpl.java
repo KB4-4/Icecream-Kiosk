@@ -25,14 +25,18 @@ public class PaymentDAOImpl implements PaymentDAO {
 	public int selectOrderNo(int member_no) throws SearchWrongException {
 		Connection con = null;
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 		int result = 0;
 		
-		String sql = "select order_no from orders where member_no = ?";
+		String sql = "select max(order_no) from orders where member_no = ?";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, member_no);
-			result = ps.executeUpdate();
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
 		} catch(SQLException e) {
 //			e.printStackTrace();
 			throw new SearchWrongException(member_no + "주문번호 검색에 오류가 발생했습니다.\n 다시 이용해주세요.");
@@ -223,7 +227,9 @@ public class PaymentDAOImpl implements PaymentDAO {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, memId);
 			rs = ps.executeQuery();
-			result = rs.getInt("point");
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
 		} catch (SQLException e) {
 			throw new NotFoundException("회원 정보를 찾을 수 없습니다.");
 		}

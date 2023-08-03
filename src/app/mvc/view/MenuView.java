@@ -1,6 +1,8 @@
 package app.mvc.view;
+
 import app.mvc.controller.CartController;
 import app.mvc.controller.LoginController;
+import app.mvc.controller.PaymentController;
 import app.mvc.session.Session;
 import app.mvc.controller.CartController;
 
@@ -12,62 +14,61 @@ public class MenuView {
 
 	public static void menu() {
 		while (true) {
-//			Session s = Session.getInstance();
-//			System.out.println(s.get());
-
 			System.out.println("=== Sweet Ice Club ===");
 			System.out.println("1. 회원가입   |   2. 로그인 ");
 
 			int menu = Integer.parseInt(sc.nextLine());
 			switch (menu) {
-				case 1:
-					MenuView.register(); // 회원가입
-					break;
-				case 2:
-					MenuView.login(); // 로그인
-					break;
-				case 100:
-					System.out.println("종료");
-					System.exit(0);
-				default:
-					System.out.println("다시 입력해주세요");
+			case 1:
+				MenuView.register(); // 회원가입
+				break;
+			case 2:
+				MenuView.login(); // 로그인
+				break;
+			case 100:
+				System.out.println("종료");
+				System.exit(0);
+			default:
+				System.out.println("다시 입력해주세요");
 			}
 		}
 	}
 
-
-    public static void printUserMenu(int memberNo) {
-        while(true) {
-//            Session ss = Session.getInstance();
-//            System.out.println(ss.getSet());
+	public static void printUserMenu(int memberNo) {
+		while (true) {
 			if (Session.getInstance().getMember_no() == memberNo) {
 
 				System.out.println("-----" + memberNo + " 로그인 중 -----");
+				//메뉴 뿌리기
+				
+				
 				System.out.println(" 1.장바구니 보기 | 2.장바구니 추가 | 3.장바구니 수정 | 4.결제 | 5.종료 ");
 				int menu = Integer.parseInt(sc.nextLine());
 				switch (menu) {
-					case 1:
-						viewCart(memberNo);
-						break;
-					case 2:
-						MenuView.putCart(memberNo);
-						break;
-					case 3:
-						MenuView.deleteCart(memberNo);
-						break;
-					case 4:
-						//결제는 어디에 만들어야 할까?
-						//OrderController.selectOrdersByMemberNo(memberNo);
-						break;
-					case 5:
-						System.exit(0);
+				case 1:
+					viewCart(memberNo);
+					break;
+				case 2:
+					MenuView.putCart(memberNo);
+					break;
+				case 3:
+					MenuView.deleteCart(memberNo);
+					break;
+				case 4:
+					MenuView.orderPayment();
+					break;
+				case 5:
+					MenuView.logout(memberNo);
+					break;
+				default:
+					System.out.println("다시 입력해주세요");
 				}
 			}
 		}
 
-    }
+	}
 
-	//메소드 모음
+	// 메소드 모음
 
 	/**
 	 * 회원가입
@@ -90,53 +91,38 @@ public class MenuView {
 	}
 
 	/**
-	 * 로그아웃
+	 * 로그아웃 → session에 저장된 값 초기화 후 메인화면으로 이동
+	 * 
 	 * @param member_no
 	 */
-	public static void logout(String member_no) {
-		Session.getInstance().setMember_no(0); //수정 필요!!!!!!!!
+	public static void logout(int member_no) {
+		Session.getInstance().setMember_no(0);
 		Session.getInstance().setCart(new HashMap<>());
+
+		System.out.println("로그아웃중... 잠시후 메인화면으로 이동됩니다");
+		MenuView.menu();
 	}
 
-//    /**
-//     * 주문하기
-//     * */
-    public static void printInputOrder(String userId) {
-//        System.out.print("주문상품번호 : ");
-//        String goodsId = sc.nextLine();
-//
-//        System.out.print("주문수량 : ");
-//        int qty = Integer.parseInt(sc.nextLine());
-//
-//        Orders orders = new Orders(0, null, userId, address, 0);
-//        OrderLine orderLine = new OrderLine(0, 0, goodsId, 0, qty, 0);
-//
-//        orders.getOrderLineList().add(orderLine);
-//
-//        OrderController.insertOrders(orders);
-    }
+	/**
+	 * 장바구니 담기
+	 */
+	public static void putCart(int memberNo) {
+		System.out.println("--장바구니 담기 작업 --");
+		System.out.print("상품번호 : ");
+		int itemNo = Integer.parseInt(sc.nextLine());
+		System.out.print("수량 : ");
+		int qty = Integer.parseInt(sc.nextLine());
 
-    /**
-     * 장바구니 담기
-     * */
-    public static void putCart(int memberNo) {
-        System.out.println("--장바구니 담기 작업 --");
-        System.out.print("상품번호 : ");
-        int itemNo = Integer.parseInt(sc.nextLine());
-        System.out.print("수량 : ");
-        int qty = Integer.parseInt(sc.nextLine());
+		CartController.putCart(memberNo, itemNo, qty);
 
-        CartController.putCart(memberNo,itemNo,qty);
+	}
 
-
-    }
-
-    /**
-     * 장바구니 보기
-     * */
-    public static void viewCart(int memberNo) {
-        CartController.viewCart(memberNo);
-    }
+	/**
+	 * 장바구니 보기
+	 */
+	public static void viewCart(int memberNo) {
+		CartController.viewCart(memberNo);
+	}
 
 	/**
 	 * 장바구니 삭제
@@ -148,5 +134,16 @@ public class MenuView {
 		System.out.print("수량 : ");
 		int cnt = Integer.parseInt(sc.nextLine());
 		CartController.deleteCart(itemNo, cnt);
+	}
+
+	/**
+	 * 결제하기
+	 */
+	public static void orderPayment() {
+		System.out.println("-----결제하실 수단을 선택해주세요-----");
+		System.out.println("1. 카드결제   |   2. 포인트결제 ");
+		System.out.println("(단, 보유 포인트가 구매 금액보다 클 때만 포인트 사용 가능합니다)");
+		int selectPayment = Integer.parseInt(sc.nextLine());
+		PaymentController.updateMemberAddPoint(selectPayment);
 	}
 }
