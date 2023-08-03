@@ -20,10 +20,6 @@ public class SuccessView {
 		builder.append("* 주문일시: ");
 		builder.append(receiptDTO.getOrderDate() + "\n");
 		builder.append("* 주문내역: \n");
-		for(Integer key : cart.keySet()) {
-			Integer value = cart.get(key);
-			builder.append(key+"/"+value+"개 \n");
-		}
 		builder.append("* 총 결제 금액: ");
 		builder.append(receiptDTO.getPayment() + "\n");
 		builder.append("* 잔여 포인트: ");
