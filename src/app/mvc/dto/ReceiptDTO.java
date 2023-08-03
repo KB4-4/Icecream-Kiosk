@@ -1,24 +1,20 @@
 package app.mvc.dto;
 
-public class OrderDTO {
+public class ReceiptDTO {
+	
 	private int orderNo; // 주문번호
-	private int memberNo; // 주문회원
-	private String orderDate; // 주문일시
+	private String orderDate; // 주문일시 
+	private int point; //잔여포인트
 	private int payment; // 결제액
+	
+	public ReceiptDTO() {}
 
-	public OrderDTO() {
-	}
-
-	public OrderDTO(int orderNo, String orderDate, int payment) {
+	public ReceiptDTO(int orderNo, String orderDate, int point, int payment) {
 		super();
 		this.orderNo = orderNo;
 		this.orderDate = orderDate;
+		this.point = point;
 		this.payment = payment;
-	}
-
-	public OrderDTO(int orderNo, int memberNo, String orderDate, int payment) {
-		this(orderNo, orderDate, payment);
-		this.memberNo = memberNo;
 	}
 
 	public int getOrderNo() {
@@ -29,20 +25,20 @@ public class OrderDTO {
 		this.orderNo = orderNo;
 	}
 
-	public int getMemberNo() {
-		return memberNo;
-	}
-
-	public void setMemberNo(int memberNo) {
-		this.memberNo = memberNo;
-	}
-
 	public String getOrderDate() {
 		return orderDate;
 	}
 
 	public void setOrderDate(String orderDate) {
 		this.orderDate = orderDate;
+	}
+
+	public int getPoint() {
+		return point;
+	}
+
+	public void setPoint(int point) {
+		this.point = point;
 	}
 
 	public int getPayment() {
@@ -56,15 +52,18 @@ public class OrderDTO {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("영수증 [주문번호=");
+		builder.append("ReceiptDTO [orderNo=");
 		builder.append(orderNo);
-		builder.append(", 주문자=");
-		builder.append(memberNo);
-		builder.append(", 주문일시=");
+		builder.append(", orderDate=");
 		builder.append(orderDate);
-		builder.append(", 총 결제 금액=");
+		builder.append(", point=");
+		builder.append(point);
+		builder.append(", payment=");
 		builder.append(payment);
+		builder.append("]");
 		return builder.toString();
-	}
+	};
+	
 		
+
 }

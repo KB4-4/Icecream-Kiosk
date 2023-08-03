@@ -1,7 +1,8 @@
 package app.mvc.service;
 
-import app.mvc.dto.MemberDTO;
-import app.mvc.dto.OrderDTO;
+import java.util.Map;
+
+import app.mvc.dto.ReceiptDTO;
 import app.mvc.exception.SearchWrongException;
 
 public interface PaymentService {
@@ -9,10 +10,15 @@ public interface PaymentService {
 	/**
 	 * 영수증 출력을 위한 주문 번호, 주문 날짜, 금액 검색
 	 */
-	OrderDTO selectOrderList(MemberDTO memberDTO) throws SearchWrongException;
+//	ReceiptDTO selectOrderList(int member_no) throws SearchWrongException;
 	
 	/**
-	 * 영수증 미출력시 안내할 주문 번호 검색
+	 * Session에 저장된 item_no로 item_name 검색 후, <item_name, qty> 반환
 	 */
-	void selectOrderNo(MemberDTO memberDTO) throws SearchWrongException;
+//	Map<String, Integer> searchItemName(Map<Integer, Integer> cart) throws SearchWrongException;
+	
+	/**
+	 * 주문번호 출력
+	 */
+	int selectOrderNo(int member_no) throws SearchWrongException;
 }
