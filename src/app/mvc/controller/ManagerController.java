@@ -19,7 +19,7 @@ public class ManagerController {
 	public static void selectOrderAll() {
 		try {
 			List<OrderDTO> list = managerService.selectOrderAll();
-			ManagerSuccessView.selectPrint(list);
+			ManagerSuccessView.selectOrderPrint(list);
 		} catch (SearchWrongException e) {
 			   ManagerFailView.errorMessage(e.getMessage());
 		   }
@@ -31,13 +31,27 @@ public class ManagerController {
 	 * 2. 일주일
 	 * 3. 한달
 	 */
-	public static void selectTotalSalesByPeriod(int period) {}
+	public static void selectTotalSalesByPeriod(int period) {
+		try {
+			int totalSales = managerService.selectTotalSalesByPeriod(period);
+			ManagerSuccessView.messagePrint("해당 기간 동안의 총 매출은 " + totalSales + "원입니다.");
+		} catch (SearchWrongException e) {
+			   ManagerFailView.errorMessage(e.getMessage());
+		   }
+	}
 	
 	// 아이템 관리
 	/**
 	*  3. 모든 아이템 검색
 	*/
-	public static void selectItemAll() {}
+	public static void selectItemAll() {
+		try {
+			List<ItemDTO> list = managerService.selectItemAll();
+			ManagerSuccessView.selectItemPrint(list);
+		} catch (SearchWrongException e) {
+			   ManagerFailView.errorMessage(e.getMessage());
+		 }
+	}
 	
 	/**
 	 *  4. 인기 아이템 검색(top3)
