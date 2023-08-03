@@ -1,89 +1,98 @@
 package app.mvc.view;
-import app.mvc.controller.CartController;
-import app.mvc.session.Session;
 
 import java.util.Scanner;
 
+import app.mvc.controller.LoginController;
+import app.mvc.session.Session;
+import app.mvc.controller.CartController;
+
 public class MenuView {
-    private static Scanner sc = new Scanner(System.in);
+	static Scanner sc = new Scanner(System.in);
 
-    public static void menu() {
-        while(true) {
-            Session session = Session.getInstance();
-            //System.out.println(ss.getSet());
+	public static void menu() {
+		while (true) {
+//			Session s = Session.getInstance();
+//			System.out.println(s.get());
 
-            //초기화면
-            MenuView.printMenu();
+			System.out.println("=== Sweet Ice Club ===");
+			System.out.println("1. 회원가입   |   2. 로그인 ");
 
-            int menu = Integer.parseInt(sc.nextLine());
-            switch(menu) {
-                case 1 :
-                    //MenuView.register(); // 가입
-                    break;
-                case 2 :
-                    MenuView.login();// 로그인
-                    break;
-
-                case 9 :
-                    System.exit(0);//종료
-            }
-        }
-
-    }
-
-
-    public static void printMenu() {
-        System.out.println("=== IceCream Mall ===");
-        System.out.println("1. 가입   |   2. 로그인   |  9. 종료");
-    }
+			int menu = Integer.parseInt(sc.nextLine());
+			switch (menu) {
+				case 1:
+					MenuView.register(); // 회원가입
+					break;
+				case 2:
+					MenuView.login(); // 로그인
+					break;
+				case 100:
+					System.out.println("종료");
+					System.exit(0);
+				default:
+					System.out.println("다시 입력해주세요");
+			}
+		}
+	}
 
 
-    public static void printUserMenu(int memberNo) {
-        while(true) {
+		public static void printUserMenu(int memberNo) {
+			while(true) {
 //            Session ss = Session.getInstance();
 //            System.out.println(ss.getSet());
 
-            System.out.println("-----" +memberNo+ " 로그인 중 -----");
-            System.out.println(" 1.장바구니 보기 | 2.장바구니 추가 | 3.장바구니 수정 | 4.결제 | 5.종료 ");
-            int menu =Integer.parseInt(sc.nextLine());
-            switch(menu) {
-                case 1 :
-                    viewCart(memberNo);
-                    break;
-                case 2 :
-                    MenuView.putCart(memberNo);//
-                    break;
-                case 3 :
-                    //장바구니 수정 어디에 만들어야 할까?
-                    break;
-                case 4 :
-                    //결제는 어디에 만들어야 할까?
-                    //OrderController.selectOrdersByMemberNo(memberNo);
-                    break;
-                case 5 :
-                    System.exit(0);
-            }
-        }
+				System.out.println("-----" +memberNo+ " 로그인 중 -----");
+				System.out.println(" 1.장바구니 보기 | 2.장바구니 추가 | 3.장바구니 수정 | 4.결제 | 5.종료 ");
+				int menu =Integer.parseInt(sc.nextLine());
+				switch(menu) {
+					case 1 :
+						viewCart(memberNo);
+						break;
+					case 2 :
+						MenuView.putCart(memberNo);//
+						break;
+					case 3 :
+						//장바구니 수정 어디에 만들어야 할까?
+						break;
+					case 4 :
+						//결제는 어디에 만들어야 할까?
+						//OrderController.selectOrdersByMemberNo(memberNo);
+						break;
+					case 5 :
+						System.exit(0);
+				}
+			}
 
-    }
+		}
 
-    //로그인
-    public static void login() {
-        System.out.print("전화번호 : ");
-        String phone = sc.nextLine();
+	//메소드 모음
 
-        CustomerController.login(phone);
-    }
+	/**
+	 * 회원가입
+	 */
+	public static void register() {
+		System.out.println("====== 회원가입 진행 ======");
+		System.out.println("====== 가입할 전화번호를 입력하세요 ======");
+		String tempPhone = sc.nextLine();
+		LoginController.inputMemberInsert(tempPhone);
 
-    /**
-     * 로그아웃
-     * */
-    public static void logout(int memberNo) {
-//        Session session = new Session(userId);
-//
-//        SessionSet ss = SessionSet.getInstance();
-//        ss.remove(session);
-    }
+	}
+
+	/**
+	 * 로그인
+	 */
+	public static void login() {
+		System.out.println("로그인 할 전화번호 입력('-' 포함)");
+		String tempPhone = sc.nextLine();
+		LoginController.inputMemberLogin(tempPhone);
+	}
+
+	/**
+	 * 로그아웃
+	 * @param member_no
+	 */
+	public static void logout(String member_no) {
+		Session.getInstance().setMember_no(0); //수정 필요!!!!!!!!
+	}
 
 //    /**
 //     * 주문하기
