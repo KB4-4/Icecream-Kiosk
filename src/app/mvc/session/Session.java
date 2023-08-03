@@ -11,47 +11,43 @@ public class Session {
     public static Session getInstance(){
         return instance;
     }
-    public static int member_no;
 
     private int member_no;	// int member_no
     private Map<Integer,Integer> cart; //장바구니	// key= item_no, value = int 수량
 
-    public Map<Integer, Integer> getCart() {
-        return cart;
-    }
-
-    public Session(int  member_no) {
-        this.member_no = member_no;
-        cart = new HashMap<>();
-    }
-    public int getmember_no() {
+// 로그인할 때 setter로만 아이디 갱신
+//    public Session(int member_no) {
+//        this.member_no = member_no;
+//        cart = new HashMap<>();
+//    }
+    public int getMember_no() {
         return member_no;
     }
 
-    public void setmember_no(int member_no) {
+    public void setMember_no(int member_no) {
         this.member_no = member_no;
     }
 
     //추가
-    public void setAttribute(int item_no, int quantity) {//cart , Map<Goods, Integer>
+    public void setCart(int item_no, int quantity) {//cart , Map<Goods, Integer>
         cart.put(item_no,quantity);
     }
 
     //조회(Map에 key에 해당하는 value 찾기)
-    public Object getAttribute(int item_no) {//cart
+    public Object getCart(int item_no) {//cart
         return cart.get(item_no);
     }
 
     //제거(장바구니를 비울대 사용한다)
-    public void removeAttribute(int item_no) {//cart
+    public void removeCart(int item_no) {//cart
         cart.remove(item_no);
     }
 
-    public Map<Integer,Integer> getcart() {
+    public Map<Integer,Integer> getCart() {
         return cart;
     }
 
-    public void setcart(Map<Integer,Integer> cart) {
+    public void setCart(Map<Integer,Integer> cart) {
         this.cart = cart;
     }
 
