@@ -1,7 +1,10 @@
 package app.mvc.dao;
 
-import java.util.Map;
-import app.mvc.dto.ReceiptDTO;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import app.mvc.dto.OrderDTO;
+import app.mvc.exception.DMLException;
 import app.mvc.exception.SearchWrongException;
 
 public interface PaymentDAO {
@@ -37,7 +40,62 @@ public interface PaymentDAO {
 	 */
 	int selectOrderNo(int member_no);
 
+	/**
+	 * 장바구니에 담은 상품 총액 계산
+	 * @author 황혜령
+	 * @return
+	 * @throws SearchWrongException
+	 */
+	int calcOfPaymentAmount() throws SearchWrongException;
+
 	
+	/**
+	 * 주문 테이블에 장바구니 정보 삽입
+	 * @author 황혜령
+	 * @return
+	 * @throws SQLException
+	 */
+	int insertOrderInfo(int pay) throws SQLException;
+
+	/**
+	 * 주문 상세 테이블에 장바구니 정보 삽입
+	 * @author 황혜령
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
+	int[] insertOrderDetail(Connection conn) throws SQLException;
+
+	/**
+	 * 적립할 포인트 계산
+	 * @author 황혜령
+	 * @return
+	 */
+	int calcPoint(int pay) throws SQLException;
 	
+	/**
+	 * 포인트 적립
+	 * @author 황혜령
+	 * @param orderDto
+	 * @return
+	 */
+	int updateMemberAddPoint(int pay) throws DMLException;
+
+	/**
+	 * 포인트 사용
+	 * @author 황혜령
+	 * @param dorDto
+	 * @return
+	 */
+	int updateMemberUsePoint(int pay);
+
+	/**
+	 * 상품 구매 후 재고 차감
+	 * @author 황혜령
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
+	int[] updateItemStock(Connection conn) throws SQLException;
 
 }
