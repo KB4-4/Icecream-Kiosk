@@ -5,11 +5,14 @@ import java.util.List;
 import app.mvc.dto.ItemDTO;
 import app.mvc.dto.MemberDTO;
 import app.mvc.dto.OrderDTO;
+import app.mvc.exception.DMLException;
 import app.mvc.exception.SearchWrongException;
 import app.mvc.service.ManagerService;
 import app.mvc.service.ManagerServiceImpl;
+import app.mvc.view.FailView;
 import app.mvc.view.ManagerFailView;
 import app.mvc.view.ManagerSuccessView;
+import app.mvc.view.SuccessView;
 
 public class ManagerController {
 	private static ManagerService managerService = ManagerServiceImpl.getInstance();
@@ -56,22 +59,51 @@ public class ManagerController {
 	/**
 	 *  4. 인기 아이템 검색(top3)
 	 */
-	public static void selectItemTop3() {};
+	public static void selectItemTop3() {
+		try {
+			List<String> list = managerService.selectItemTop3();
+			ManagerSuccessView.selectTop3ItemPrint(list);
+		} catch (SearchWrongException e) {
+			   ManagerFailView.errorMessage(e.getMessage());
+		 }
+	};
 	
 	/**
 	 * 5. 아이템 추가
 	 */
-	public static void insertItem(ItemDTO itemDTO) {}
+	public static void insertItem(ItemDTO itemDTO) {
+		try {
+			managerService.insertItem(itemDTO);
+			SuccessView.messagePrint(itemDTO+" 아이템이 추가되었습니다.");
+		} catch (DMLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 	
 	/**
 	 * 6. 아이템 이름으로 삭제
 	 */
-	public static void deleteItemByItemName(String itemName) {}
+	public static void deleteItemByItemName(String itemName) {
+		try {
+			managerService.deleteItemByItemName(itemName);
+			SuccessView.messagePrint(itemName+"아이스크림 메뉴를 삭제하였습니다.");
+		} catch (DMLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
+	
 	
 	/**
 	 * 7. 아이템 아이템번호로 선택한 후 수정(재고관리)
 	 */
-	public static void updateItemStock(ItemDTO itemDTO) {}
+	public static void updateItemStock(ItemDTO itemDTO) {
+		try {
+			managerService.updateItemStock(itemDTO);
+			SuccessView.messagePrint(itemDTO.getItemName()+ "아이스크림 재고를 " +itemDTO. getStock()+"개 추가하였습니다.");
+		} catch (DMLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 	
 	// 멤버 관리
 	/**
