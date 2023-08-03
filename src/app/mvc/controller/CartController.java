@@ -52,16 +52,38 @@ public class CartController {
             if (cart == null) { // 장바구니가 없는 고객
                 FailView.errorMessage("장바구니가 비었습니다.");
             } else {
-//            for(Integer key : cart.keySet()) {
-//                Integer qut = cart.get(key);
-//            }
-//            EndView.printViewCart(id , cart);
                 EndView.printViewCart(memberNo, cart);
             }
         }
     }
-    public static void deleteCart() {
-        
+    public static void deleteCart(int itemNo, int cnt) {
+        try {
+            Map<Integer, Integer> cart = Session.getInstance().getCart();
+
+
+            if(cart.isEmpty()) {
+                FailView.errorMessage("장바구니가 비어있습니다.");
+            } else {
+                //cart.remove(itemNo);
+                if(cart.containsKey(itemNo)) {
+                    int nowCnt = cart.get(itemNo);
+                    int resultCnt = nowCnt - cnt;
+                    if (resultCnt < 0) {
+                        System.out.println("현재수량보다 삭제할 수량이 많습니다.");
+                    } else if(resultCnt == 0) {
+                        cart.remove(itemNo);
+                        EndView.printMessage("장바구니에서 상품을 삭제했습니다.");
+
+                    } else{
+                        cart.put(itemNo, resultCnt);
+                        EndView.printMessage("장바구니에서 " + itemNo + "번을 " + cnt + "개를 삭제했습니다.");
+                    }
+                }
+            }
+        } catch(Exception e) {
+            //e.printStackTrace();
+            FailView.errorMessage(e.getMessage());
+        }
     }
 
 

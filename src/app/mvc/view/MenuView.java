@@ -50,10 +50,10 @@ public class MenuView {
 						viewCart(memberNo);
 						break;
 					case 2:
-						MenuView.putCart(memberNo);//
+						MenuView.putCart(memberNo);
 						break;
 					case 3:
-						//장바구니 수정 어디에 만들어야 할까?
+						MenuView.deleteCart(memberNo);
 						break;
 					case 4:
 						//결제는 어디에 만들어야 할까?
@@ -136,8 +136,17 @@ public class MenuView {
      * */
     public static void viewCart(int memberNo) {
         CartController.viewCart(memberNo);
-
-
-
     }
+
+	/**
+	 * 장바구니 삭제
+	 */
+	public static void deleteCart(int memberNo) {
+		System.out.println("--장바구니 삭제 작업 --");
+		System.out.print("상품번호 : ");
+		int itemNo = Integer.parseInt(sc.nextLine());
+		System.out.print("수량 : ");
+		int cnt = Integer.parseInt(sc.nextLine());
+		CartController.deleteCart(itemNo, cnt);
+	}
 }

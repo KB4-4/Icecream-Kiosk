@@ -9,7 +9,7 @@ public class EndView {
         System.out.println(message);
     }
     public static void printViewCart(int member_no, Map<Integer,Integer> cart) {
-        System.out.println("장바구니내용....");
+        System.out.println("장바구니가 비어있습니다.");
 
         for (Integer key : cart.keySet()) {
             int itemNo = key;//상품번호
