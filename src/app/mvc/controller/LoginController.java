@@ -31,8 +31,9 @@ public class LoginController {
     	try {
     		MemberDTO memberDTO = memberService.memberLogin(tempPhone);
     		Session.getInstance().setMember_no(memberDTO.getMemberNo());
-//            System.out.println("지금 뷰의 세션 : " + Session.getInstance().getMember_no());
+            System.out.println("지금 뷰의 세션 : " + Session.getInstance().getMember_no());
     	} catch (SearchWrongException e) {
+    		System.out.println("fail");
     		FailView.errorMessage(e.getMessage());
     	}
     }
