@@ -39,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public int payByCredit() throws DMLException, PayException, SQLException  {
+	public int payByCredit() throws PayException, SQLException  {
 		pay = paymentDAO.calcOfPaymentAmount();
 
 		//결제 성공 여부 확인
@@ -54,7 +54,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public int payByPoint() throws DMLException, PayException, NotFoundException, SQLException {
+	public int payByPoint() throws PayException, NotFoundException, SQLException {
 		pay = paymentDAO.calcOfPaymentAmount();
 
 		//포인트로 전액 결제 가능 여부 확인

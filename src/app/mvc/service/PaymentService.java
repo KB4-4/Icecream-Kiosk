@@ -27,11 +27,11 @@ public interface PaymentService {
 	/**
 	 * 카드 결제
 	 */
-	int payByCredit() throws DMLException, PayException, SQLException;
+	int payByCredit() throws PayException, SQLException;
 	
 	/**
 	 * 포인트 결제
 	 */
-	int payByPoint() throws DMLException, PayException, NotFoundException, SQLException;
+	int payByPoint() throws PayException, NotFoundException, SQLException;
 	
 }
