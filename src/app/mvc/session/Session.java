@@ -31,5 +31,4 @@ public class Session {
 		Session.instance = instance;
 	}
 
-    
 }

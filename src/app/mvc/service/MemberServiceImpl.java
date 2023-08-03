@@ -29,12 +29,21 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public MemberDTO memberLogin(String phone) throws SearchWrongException {
         MemberDTO memberDTO = memberDAO.memberLogin(phone);
-        if(memberDTO == null) throw new SearchWrongException(phone + "의 정보가 없습니다.");
-        else {
+        if(memberDTO != null) {
             System.out.println("회원 정보" + memberDTO);
             Session.getInstance().setMember_no(memberDTO.getMemberNo());
             System.out.println(Session.getInstance().getMember_no() + "세션 확인");
+            return memberDTO;
+
+//            System.out.println(phone + "의 정보가 없습니다.");
+//            return null;
         }
-        return memberDTO;
-    }
+//        else {
+            //System.out.println("회원 정보" + memberDTO);
+            //Session.getInstance().setMember_no(memberDTO.getMemberNo());
+            //System.out.println(Session.getInstance().getMember_no() + "세션 확인");
+//        }
+        throw new SearchWrongException(phone + "의 정보가 없습니다.");
+
+        }
 }

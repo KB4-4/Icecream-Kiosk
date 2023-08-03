@@ -14,7 +14,6 @@ import app.mvc.view.SuccessView;
 import java.util.Scanner;
 
 public class LoginController {
-	
     static Session session;
     static Scanner sc = new Scanner(System.in);
     private static MemberService memberService = MemberServiceImpl.getInstance();
@@ -35,5 +34,6 @@ public class LoginController {
     	} catch (SearchWrongException e) {
     		FailView.errorMessage(e.getMessage());
     	}
+
     }
 }
