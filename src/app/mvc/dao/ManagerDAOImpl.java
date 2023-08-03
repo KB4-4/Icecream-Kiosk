@@ -9,7 +9,6 @@ import java.util.List;
 
 import app.mvc.common.DBManager;
 import app.mvc.dto.ItemDTO;
-import app.mvc.dto.MemberDTO;
 import app.mvc.dto.OrderDTO;
 import app.mvc.exception.DMLException;
 import app.mvc.exception.SearchWrongException;
