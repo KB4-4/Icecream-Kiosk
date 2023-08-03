@@ -13,7 +13,7 @@ public interface ManagerDAO {
 	/**
 	 * 1. 모든 주문 검색
 	 */
-	List<OrderDTO> selectOrdersAll() throws SearchWrongException;
+	List<OrderDTO> selectOrderAll() throws SearchWrongException;
 	
 	/**
 	 * 2. 기간별 주문 검색(매출액)

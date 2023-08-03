@@ -3,14 +3,16 @@ package app.mvc.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.ItemDTO;
-import dto.MemberDTO;
-import dto.OrderDTO;
+import app.mvc.common.DBManager;
+import app.mvc.dto.ItemDTO;
+import app.mvc.dto.MemberDTO;
+import app.mvc.dto.OrderDTO;
+import app.mvc.exception.SearchWrongException;
 import exception.DMLException;
-import exception.SearchWrongException;
 
 public class ManagerDAOImpl implements ManagerDAO {
 	private static ManagerDAO instance = new ManagerDAOImpl();
@@ -26,9 +28,28 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		List<OrderDTO> list = new ArrayList<>();
+		List<app.mvc.dto.OrderDTO> list = new ArrayList<>();
 		String sql="select order_no, member_no, order_date, payment from orders";
-		
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int orderNo = rs.getInt("order_no");
+				int memberNo = rs.getInt("member_no");
+				String orderDate = rs.getString("order_date");
+				int payment = rs.getInt("payment");
+
+				OrderDTO orderdto = new OrderDTO(orderNo, memberNo, orderDate, payment);
+				list.add(orderdto);
+			}
+		} catch (SQLException e) {
+			//				e.printStackTrace();
+			throw new SearchWrongException("전체 주문 검색에 오류가 발생했습니다.");
+		} finally {
+			DBManager.releaseConnection(con, ps, rs);
+		}
+		return list;
 	}
  
 	@Override // 2. 기간별 주문 검색(매출액)
