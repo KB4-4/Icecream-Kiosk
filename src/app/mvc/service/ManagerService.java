@@ -2,12 +2,12 @@ package app.mvc.service;
 
 import java.util.List;
 
-import app.mvc.dao.itemDTO;
+
 import app.mvc.dto.ItemDTO;
 import app.mvc.dto.MemberDTO;
 import app.mvc.dto.OrderDTO;
+import app.mvc.exception.DMLException;
 import app.mvc.exception.SearchWrongException;
-import exception.DMLException;
 
 public interface ManagerService {
 	// 주문 관리
@@ -33,7 +33,7 @@ public interface ManagerService {
 		/**
 		 *  4. 인기 아이템 검색(top3)
 		 */
-		List<itemDTO> selectItemTop3() throws SearchWrongException;
+		List<String> selectItemTop3() throws SearchWrongException;
 		
 		/**
 		 * 5. 아이템 추가
