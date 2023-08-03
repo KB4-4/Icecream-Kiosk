@@ -1,6 +1,5 @@
 package app.mvc.controller;
 
-import app.mvc.dto.MemberDTO;
 import app.mvc.exception.SearchWrongException;
 import app.mvc.service.PaymentService;
 import app.mvc.service.PaymentServiceImpl;
@@ -28,6 +27,29 @@ public class PaymentController {
 		try {
 			SuccessView.messagePrint("주문번호: "+paymentService.selectOrderNo(member_no)+"\n");
 		} catch (SearchWrongException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 결제 및 주문 정보 업데이트
+	 */
+	public static void updateMemberAddPoint(int choice) {
+		try {
+			//카드 결제
+			if(choice == 1) {
+				paymentService.payByCredit();
+				SuccessView.messagePrint("결제가 완료 되었습니다.");
+			}
+			//포인트 결제
+			else if(choice == 2) {
+				paymentService.payByPoint();
+				SuccessView.messagePrint("결제가 완료 되었습니다.");
+			}
+			else {
+				FailView.errorMessage("잘못된 입력입니다.");
+			}
+		} catch (Exception e) {
 			FailView.errorMessage(e.getMessage());
 		}
 	}

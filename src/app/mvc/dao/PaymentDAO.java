@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 import app.mvc.dto.OrderDTO;
 import app.mvc.exception.DMLException;
+import app.mvc.exception.NotFoundException;
+import app.mvc.exception.PayException;
 import app.mvc.exception.SearchWrongException;
 
 public interface PaymentDAO {
@@ -55,7 +57,7 @@ public interface PaymentDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	int insertOrderInfo(int pay) throws SQLException;
+	int insertOrderInfo(Connection conn, int pay) throws SQLException;
 
 	/**
 	 * 주문 상세 테이블에 장바구니 정보 삽입
@@ -79,16 +81,23 @@ public interface PaymentDAO {
 	 * @param orderDto
 	 * @return
 	 */
-	int updateMemberAddPoint(int pay) throws DMLException;
+	int updateMemberAddPoint(int pay) throws PayException, SQLException;
 
+	/**
+	 * 잔여 포인트 확인
+	 * @author 황혜령
+	 * @return int
+	 */
+	int selectMemberPoint() throws NotFoundException;
+	
 	/**
 	 * 포인트 사용
 	 * @author 황혜령
 	 * @param dorDto
 	 * @return
 	 */
-	int updateMemberUsePoint(int pay);
-
+	int updateMemberUsePoint(int pay) throws PayException, SQLException;
+	
 	/**
 	 * 상품 구매 후 재고 차감
 	 * @author 황혜령

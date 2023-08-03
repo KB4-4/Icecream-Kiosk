@@ -8,6 +8,8 @@ import java.util.Map;
 
 import app.mvc.common.DBManager;
 import app.mvc.exception.DMLException;
+import app.mvc.exception.NotFoundException;
+import app.mvc.exception.PayException;
 import app.mvc.exception.SearchWrongException;
 import app.mvc.session.Session;
 
@@ -19,34 +21,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 		return instance;
 	}
 	
-	//영수증 출력
-//	@Override
-//	public ReceiptDTO selectOrderList(int member_no) throws SearchWrongException {
-//		Connection con = null;
-//		PreparedStatement ps = null;
-//		ResultSet rs = null;
-//		ReceiptDTO receiptDTO = null;
-//		
-//		String sql = "select order_no, order_date, payment, point from orders join member using(member_no) where member_id=?";
-//		try {
-//			con = DBManager.getConnection();
-//			ps = con.prepareStatement(sql);
-//			ps.setInt(1, member_no);
-//			rs = ps.executeQuery();
-//			
-//			if(rs.next()) {
-//				receiptDTO = new ReceiptDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
-//			}
-//		} catch(SQLException e) {
-////			e.printStackTrace();
-//			throw new SearchWrongException(member_no + "주문 검색에 오류가 발생했습니다.\n 다시 이용해주세요.");
-//		} finally {
-//			DBManager.releaseConnection(con, ps, rs);
-//		}
-//		return receiptDTO;
-//	}
-
-	//영수증 출력x, 주문번호만 출력
 	@Override
 	public int selectOrderNo(int member_no) throws SearchWrongException {
 		Connection con = null;
@@ -78,8 +52,8 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 		Map<Integer, Integer> cart = Session.getInstance().getCart();
 
+		//TODO: 상품별 가격으로 총액 구하기(상품 가격 다를 경우)
 		//모든 상품 가격 동일함
-		//TODO: 상품별 가격으로 총액 구하기(상품 가격 다른 경우)
 		String sql = "SELECT DISTINCT price FROM ITEM";
 
 		try {
@@ -103,19 +77,15 @@ public class PaymentDAOImpl implements PaymentDAO {
 	}
 
 	@Override
-	public int insertOrderInfo(int pay) throws SQLException {
+	public int insertOrderInfo(Connection conn, int pay) throws SQLException {
 		int memId = Session.getInstance().getMember_no();
 
-		Connection conn = null;
 		PreparedStatement ps = null;
 		String sql = "INSERT INTO ORDERS values(order_seq.nextval, ?, DEFAULT, ?)";
 		int result = 0;
 
 
 		try {
-			conn = DBManager.getConnection();
-			conn.setAutoCommit(false);
-
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, memId);
 			ps.setInt(2, pay);
@@ -141,12 +111,10 @@ public class PaymentDAOImpl implements PaymentDAO {
 						throw new SQLException("주문이 완료되지 않았습니다.");
 					}
 				}
-
-				conn.commit();
 			}
 
 		} finally {
-			DBManager.releaseConnection(conn, ps);
+			DBManager.releaseConnection(null, ps);
 		}
 
 		return result;
@@ -206,10 +174,8 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	
 	@Override
-	public int updateMemberAddPoint(int pay) throws DMLException {
-//		int memId = Session.getInstance().getMember_no();
-		
-		int memId = 1;
+	public int updateMemberAddPoint(int pay) throws PayException, SQLException {
+		int memId = Session.getInstance().getMember_no();
 		int result = 0;
 		
 		Connection conn = null;
@@ -218,6 +184,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 		
 		try {
 			conn = DBManager.getConnection();
+			conn.setAutoCommit(false);
 			
 			int point = this.calcPoint(pay);
 
@@ -225,15 +192,46 @@ public class PaymentDAOImpl implements PaymentDAO {
 			ps.setInt(1, point);
 			ps.setInt(2, memId);
 			result = ps.executeUpdate();
+			
+			//주문 정보 업데이트
+			int orderResult = this.insertOrderInfo(conn, pay);
+			if(orderResult == 0) {
+				conn.rollback();
+				throw new PayException("주문이 완료되지 못했습니다.");
+			}
+			conn.commit();
 		} catch (SQLException e) {
-			throw new DMLException("포인트 적립 실패했습니다.\n관리자에게 문의하세요.");
+			conn.commit();
+			throw new PayException("포인트 적립 실패했습니다.\n관리자에게 문의하세요.");
 		}
 		
 		return result;
 	}
+	
+	@Override
+	public int selectMemberPoint() throws NotFoundException {
+		int memId = Session.getInstance().getMember_no();
+		
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "SELECT point FROM MEMBER WHERE member_no = ?";
+		int result = 0;
+		
+		try {
+			conn = DBManager.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, memId);
+			rs = ps.executeQuery();
+			result = rs.getInt("point");
+		} catch (SQLException e) {
+			throw new NotFoundException("회원 정보를 찾을 수 없습니다.");
+		}
+		return result;
+	}
 
 	@Override
-	public int updateMemberUsePoint(int pay) {
+	public int updateMemberUsePoint(int pay) throws PayException, SQLException {
 		int memId = Session.getInstance().getMember_no();
 		int result = 0;
 		
@@ -243,13 +241,25 @@ public class PaymentDAOImpl implements PaymentDAO {
 		
 		try {
 			conn = DBManager.getConnection();
+			conn.setAutoCommit(false);
 			
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, pay);
 			ps.setInt(2, memId);
 			result = ps.executeUpdate();
+			
+			//주문 정보 업데이트
+			int orderResult = this.insertOrderInfo(conn, pay);
+			if(orderResult == 0) {
+				conn.rollback();
+				throw new PayException("주문이 완료되지 못했습니다.");
+			}
+			conn.commit();
 		} catch (SQLException e) {
 			throw new DMLException("포인트 결제에 실패했습니다.");
+		} finally {
+			conn.commit();
+			DBManager.releaseConnection(conn, ps);
 		}
 		
 		return result;

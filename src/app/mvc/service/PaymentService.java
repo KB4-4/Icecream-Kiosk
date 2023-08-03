@@ -1,8 +1,10 @@
 package app.mvc.service;
 
-import java.util.Map;
+import java.sql.SQLException;
 
-import app.mvc.dto.ReceiptDTO;
+import app.mvc.exception.DMLException;
+import app.mvc.exception.NotFoundException;
+import app.mvc.exception.PayException;
 import app.mvc.exception.SearchWrongException;
 
 public interface PaymentService {
@@ -21,4 +23,15 @@ public interface PaymentService {
 	 * 주문번호 출력
 	 */
 	int selectOrderNo(int member_no) throws SearchWrongException;
+	
+	/**
+	 * 카드 결제
+	 */
+	int payByCredit() throws DMLException, PayException, SQLException;
+	
+	/**
+	 * 포인트 결제
+	 */
+	int payByPoint() throws DMLException, PayException, NotFoundException, SQLException;
+	
 }
