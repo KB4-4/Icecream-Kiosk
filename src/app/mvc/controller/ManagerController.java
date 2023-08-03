@@ -1,14 +1,29 @@
 package app.mvc.controller;
 
+import java.util.List;
+
 import app.mvc.dto.ItemDTO;
 import app.mvc.dto.MemberDTO;
-import exception.SearchWrongException;
+import app.mvc.dto.OrderDTO;
+import app.mvc.exception.SearchWrongException;
+import app.mvc.service.ManagerService;
+import app.mvc.service.ManagerServiceImpl;
+import app.mvc.view.ManagerFailView;
+import app.mvc.view.ManagerSuccessView;
 
 public class ManagerController {
+	private static ManagerService managerService = ManagerServiceImpl.getInstance();
 	/**
 	 * 1. 모든 주문 검색
 	 */
-	public static void selectOrderAll() {}
+	public static void selectOrderAll() {
+		try {
+			List<OrderDTO> list = managerService.selectOrderAll();
+			ManagerSuccessView.selectPrint(list);
+		} catch (SearchWrongException e) {
+			   ManagerFailView.errorMessage(e.getMessage());
+		   }
+	}
 	
 	/**
 	 * 2. 기간별 주문 검색(매출액)
