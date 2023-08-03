@@ -17,6 +17,20 @@ public class ItemDTO {
 		this.stock = stock;
 		this.info = info;
 	}
+	
+	public ItemDTO(String itemName, int price, int stock, String info) {
+		super();
+		this.itemName = itemName;
+		this.price = price;
+		this.stock = stock;
+		this.info = info;
+	}
+	
+	public ItemDTO(String itemName, int stock) {
+		super();
+		this.itemName = itemName;
+		this.stock = stock;
+	}
 
 	public int getItemNo() {
 		return itemNo;
