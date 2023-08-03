@@ -28,20 +28,20 @@ public class Session {
         this.member_no = member_no;
     }
 
-    //추가
-    public void setCart(int item_no, int quantity) {//cart , Map<Goods, Integer>
-        cart.put(item_no,quantity);
-    }
-
-    //조회(Map에 key에 해당하는 value 찾기)
-    public Object getCart(int item_no) {//cart
-        return cart.get(item_no);
-    }
-
-    //제거(장바구니를 비울대 사용한다)
-    public void removeCart(int item_no) {//cart
-        cart.remove(item_no);
-    }
+//    //추가
+//    public void setCart(int item_no, int quantity) {//cart , Map<Goods, Integer>
+//        cart.put(item_no,quantity);
+//    }
+//
+//    //조회(Map에 key에 해당하는 value 찾기)
+//    public Object getCart(int item_no) {//cart
+//        return cart.get(item_no);
+//    }
+//
+//    //제거(장바구니를 비울대 사용한다)
+//    public void removeCart(int item_no) {//cart
+//        cart.remove(item_no);
+//    }
 
     public Map<Integer,Integer> getCart() {
         return cart;
