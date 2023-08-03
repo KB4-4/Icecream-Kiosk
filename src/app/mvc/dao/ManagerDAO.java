@@ -27,7 +27,7 @@ public interface ManagerDAO {
 	/**
 	 *  3. 모든 아이템 검색
 	 */
-	ItemDTO selectItemAll() throws SearchWrongException;
+	List<ItemDTO> selectItemAll() throws SearchWrongException;
 	
 	/**
 	 *  4. 인기 아이템 검색(top3)
