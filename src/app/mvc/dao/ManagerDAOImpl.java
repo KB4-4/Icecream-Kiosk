@@ -11,8 +11,8 @@ import app.mvc.common.DBManager;
 import app.mvc.dto.ItemDTO;
 import app.mvc.dto.MemberDTO;
 import app.mvc.dto.OrderDTO;
+import app.mvc.exception.DMLException;
 import app.mvc.exception.SearchWrongException;
-import exception.DMLException;
 
 public class ManagerDAOImpl implements ManagerDAO {
 	private static ManagerDAO instance = new ManagerDAOImpl();
@@ -123,17 +123,31 @@ public class ManagerDAOImpl implements ManagerDAO {
 	}
 	
 	@Override // 4. 인기 아이템 검색(top3)
-	public List<ItemDTO> selectItemTop3() throws SearchWrongException {
+	public List<String> selectItemTop3() throws SearchWrongException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		List<ItemDTO> list = new ArrayList<>();
+		List<String> list = new ArrayList<>();
+		String icecreamName = null;
 		String sql = "select item_name from item "
 				+ "where item_no in "
 				+ "(select item_no from "
 				+ "(select item_no from order_detail group by item_no order by sum(qty) desc) "
 				+ "where rownum <= 3)";
-	}
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				icecreamName = rs.getString("item_name");
+				list.add(icecreamName);
+			}
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			throw new SearchWrongException("top3 아이스크림 검색에 오류가 발생했습니다.");
+		}
+		return list;
+	} 
 
 	@Override // 5. 아이템 추가
 	public int insertItem(ItemDTO itemDTO) throws DMLException {
@@ -141,12 +155,27 @@ public class ManagerDAOImpl implements ManagerDAO {
 		PreparedStatement ps = null;
 		int result = 0;
 		String sql="insert into item (item_no, item_name, price, stock, info) "
-				+ "values (?, ?, ?, ?, ?)";
+				+ "values (item_seq.nextval, ?, ?, ?, ?)";
 		// 1. itemDTO.getItemNo();
 		// 2. itemDTO.getItemName();
 		// 3. itemDTO.getPrice();
 		// 4. itemDTO.getStock();
 		// 5. itemDTO.getInfo();
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, itemDTO.getItemName());
+			ps.setInt(2, itemDTO.getPrice());
+			ps.setInt(3, itemDTO.getStock());
+			ps.setString(4, itemDTO.getInfo());
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DMLException("아이스크림 추가에 오류가 발생했습니다.");
+		} finally {
+			DBManager.releaseConnection(con, ps);
+		}
+		return result;
 	}
 
 	@Override // 6. 아이템 이름으로 삭제
@@ -155,7 +184,19 @@ public class ManagerDAOImpl implements ManagerDAO {
 		PreparedStatement ps = null;
 		int result = 0;
 		String sql="delete from item where item_name = ?";
-		// ? itemName
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, itemName);
+			
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DMLException("아이스크림 메뉴 삭제에 오류가 발생했습니다.");
+		} finally {
+			DBManager.releaseConnection(con, ps);
+		}
+		return result;
 	}
 
 	@Override // 7. 아이템 아이템번호로 선택한 후 수정(재고관리)
@@ -163,7 +204,21 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="update item set stock = ? where item_no = ? ";
+		String sql="update item set stock = ?+stock where item_name = ? ";
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, itemDTO.getStock());
+			ps.setString(2, itemDTO.getItemName());
+			
+			result = ps.executeUpdate();
+		}  catch (SQLException e) {
+			//e.printStackTrace();
+			throw new DMLException("아이스크림 재고관리에 오류가 발생했습니다.");
+		} finally {
+			DBManager.releaseConnection(con, ps);
+		}
+		return result;
 	}
 
 	@Override // 8. 전체 멤버 검색
