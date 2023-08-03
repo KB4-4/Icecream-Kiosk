@@ -70,5 +70,170 @@ public class PaymentDAOImpl implements PaymentDAO {
 		}
 		return result;
 	}
+	@Override
+	public int calcOfPaymentAmount() throws SearchWrongException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int result = 0;
+		int price = 0;
 
+		//TODO: 세션값으로 바꾸기
+		Map<Integer, Integer> cart = new HashMap<>();
+		cart.put(1,1);
+		cart.put(2,2);
+		cart.put(5,6);
+		cart.put(3,4);
+
+		//모든 상품 가격 동일함
+		String sql = "SELECT DISTINCT price FROM ITEM";
+
+		try {
+			conn = DBManager.getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			if(rs.next())
+				price = rs.getInt("price");
+
+			for(int item : cart.keySet())
+				result += (cart.get(item) * price);
+
+		}catch (SQLException e) {
+			throw new SearchWrongException("상품 정보 불러오기에 실패했습니다.\n다시 이용해주세요");
+		} finally {
+			DBManager.releaseConnection(conn, ps, rs);
+		}
+
+		return result;
+	}
+
+	@Override
+	public int insertOrderInfo() throws SQLException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		String sql = "INSERT INTO ORDERS values(order_seq.nextval, ?, DEFAULT, ?)";
+		int result = 0;
+
+		//TODO: 세션값으로 바꾸기
+		int memId = 1;
+
+		try {
+			int pay = this.calcOfPaymentAmount();
+			conn = DBManager.getConnection();
+			conn.setAutoCommit(false);
+
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, memId);
+			ps.setInt(2, pay);
+
+			result = ps.executeUpdate();
+			if(result == 0) {
+				conn.rollback();
+				throw new SQLException("주문이 완료되지 않았습니다.");
+			}
+			else {
+				int[] re = this.insertOrderDetail(conn);
+				for(int i : re) {
+					if(i != 1) {
+						conn.rollback();
+						throw new SQLException("주문이 완료되지 않았습니다.");
+					}
+				}
+
+				int[] res = this.updateItemStock(conn);
+				for(int i : res) {
+					if(i != 1) {
+						conn.rollback();
+						throw new SQLException("주문이 완료되지 않았습니다.");
+					}
+				}
+
+				conn.commit();
+			}
+
+		} finally {
+			DBManager.releaseConnection(conn, ps);
+		}
+
+		return result;
+	}
+
+	@Override
+	public int[] insertOrderDetail(Connection conn) throws SQLException {
+		//TODO: 세션값으로 바꾸기
+		Map<Integer, Integer> cart = new HashMap<>();
+		cart.put(1,1);
+		cart.put(2,2);
+		cart.put(5,6);
+		cart.put(3,4);
+
+		PreparedStatement ps = null;
+		String sql = "INSERT INTO ORDER_DETAIL VALUES(order_detail_seq.nextval, order_seq.currval, ?, ?)";
+		int[] result = null;
+
+		try {
+			ps = conn.prepareStatement(sql);
+
+			for(int item : cart.keySet()) {
+				ps.setInt(1, item);
+				ps.setInt(2, cart.get(item));
+				ps.addBatch();
+				ps.clearParameters();
+			}
+			result = ps.executeBatch();
+
+		} finally {
+			DBManager.releaseConnection(null, ps, null);
+		}
+
+		return result;
+	}
+
+	@Override
+	public int updateMemberAddPoint(OrderDTO orderDto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int updateMemberUsePoint(OrderDTO dorDto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int[] updateItemStock(Connection conn) throws SQLException {
+		PreparedStatement ps = null;
+		String sql = "update item set stock = (stock - ?) where item_no = ?";
+		int[] result = null;
+
+		try {
+			//TODO: 세션값으로 바꾸기
+			Map<Integer, Integer> cart = new HashMap<>();
+			cart.put(6,4);
+			cart.put(7,6);
+			cart.put(8,2);
+			cart.put(10,1);
+
+			ps = conn.prepareStatement(sql);
+
+			for(int item : cart.keySet()) {
+				System.out.println(item + ": " + cart.get(item));
+				ps.setInt(1, cart.get(item));
+				ps.setInt(2, item);
+				ps.addBatch();
+				ps.clearParameters();
+			}
+
+			result = ps.executeBatch();
+			for(int i : result)
+				System.out.println(i);
+
+		} finally {
+			DBManager.releaseConnection(null, ps, null);
+		}
+
+		return result;
+	}
 }

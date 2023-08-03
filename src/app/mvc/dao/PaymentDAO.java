@@ -37,7 +37,48 @@ public interface PaymentDAO {
 	 */
 	int selectOrderNo(int member_no);
 
-	
-	
+	/**
+	 * 총 결제 금액 구하기
+	 * @author 황혜령
+	 * @return int
+	 */
+	int calcOfPaymentAmount();
 
+	/**
+	 * 주문 내역 추가하기
+	 * @author 황혜령
+	 * @return int
+	 */
+	int insertOrderInfo()  throws SQLException;
+
+	/**
+	 * 재고량 감소시키기
+	 * @author 황혜령
+	 * @return int
+	 */
+	int[] updateItemStock(Connection conn) throws SQLException;
+
+	/**
+	 * 주문 상세 내역 추가하기
+	 * @author 황혜령
+	 * @param OrderDTO
+	 * @return int - 추가된 row 수
+	 */
+	int[] insertOrderDetail(Connection conn) throws SQLException ;
+
+	/**
+	 * 포인트 적립하기
+	 * @author 황혜령
+	 * @param OrderDTO
+	 * @return int - 변경된 row 수
+	 */
+	int updateMemberAddPoint(OrderDTO orderDto);
+
+	/**
+	 * 포인트 차감하기
+	 * @author 황혜령
+	 * @param OrderDTO
+	 * @return int - 변경된 row 수
+	 */
+	int updateMemberUsePoint(OrderDTO dorDto);
 }
