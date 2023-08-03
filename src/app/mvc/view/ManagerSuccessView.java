@@ -21,6 +21,14 @@ public class ManagerSuccessView {
 		}
 	}
 	
+	public static void selectTop3ItemPrint(List<String> list) {
+		System.out.println("---- 아이스크림 Top3 ("+list.size()+") 개 ------------------");
+		int num = 1;
+		for(String iceream : list) {
+			System.out.println(num++ + "순위: "+ iceream);//board.toString()호출
+		}
+	}
+	
 	public static void messagePrint(String message) {
 		System.out.println(message);
 	}
