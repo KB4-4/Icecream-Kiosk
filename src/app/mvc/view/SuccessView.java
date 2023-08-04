@@ -15,9 +15,11 @@ public class SuccessView {
 	
 	//상품 전체 출력
 	public static void printMenuList(List<ItemDTO> list) {
-		System.out.println("-------상품 "+list.size()+"개 ---------");
+		System.out.println("------------------------------------------------------------------------");
+
 		for(ItemDTO itemDto : list) {
 			System.out.println(itemDto);
+			System.out.println("------------------------------------------------------------------------");
 		}
 		System.out.println();
 	}
@@ -37,7 +39,7 @@ public class SuccessView {
 	public static void selectOrderListPrint(ReceiptDTO receiptDTO, Map<Integer, Integer> cart) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("============= 영수증 =============\n");
+		builder.append("==================영수증==================\n");
 		builder.append("* 주문번호: ");
 		builder.append(receiptDTO.getOrderNo() + "\n");
 		builder.append("* 주문일시: ");
@@ -47,7 +49,7 @@ public class SuccessView {
 		builder.append(receiptDTO.getPayment() + "\n");
 		builder.append("* 잔여 포인트: ");
 		builder.append(receiptDTO.getPoint() + "\n");
-		builder.append("==================================\n");
+		builder.append("==========================================\n");
 		builder.toString();
 		System.out.println(builder);
 	}
