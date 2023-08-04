@@ -26,6 +26,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 주문 번호 검색(결제 후 주문번호 출력)
+	 * select
 	 */
 	@Override
 	public int selectOrderNo(int member_no) throws SearchWrongException {
@@ -53,6 +54,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 장바구니에 담은 상품 총액 계산
+	 * select
 	 */
 	@Override
 	public int calcOfPaymentAmount() throws SearchWrongException {
@@ -89,6 +91,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 주문 테이블에 장바구니 정보 삽입
+	 * insert
 	 */
 	@Override
 	public int insertOrderInfo(Connection conn, int pay) throws SQLException {
@@ -133,6 +136,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 주문 상세 테이블에 장바구니 정보 삽입
+	 * insert
 	 */
 	@Override
 	public int[] insertOrderDetail(Connection conn) throws SQLException {
@@ -162,6 +166,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 적립할 포인트 계산
+	 * SubQuery
 	 */
 	@Override
 	public int calcPoint(int pay) throws SQLException {
@@ -190,6 +195,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 포인트 적립
+	 * update
 	 */
 	@Override
 	public int updateMemberAddPoint(int pay) throws PayException, SQLException {
@@ -228,6 +234,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 잔여 포인트 조회
+	 * select
 	 */
 	@Override
 	public int selectMemberPoint() throws NotFoundException {
@@ -255,6 +262,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 포인트 사용
+	 * update
 	 */
 	@Override
 	public int updateMemberUsePoint(int pay) throws PayException, SQLException {
@@ -293,6 +301,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 	/**
 	 * 상품 구매 후 재고 차감
+	 * update
 	 */
 	@Override
 	public int[] updateItemStock(Connection conn) throws SQLException {

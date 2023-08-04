@@ -25,6 +25,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 	/**
 	 * 모든 주문 내역 검색
+	 * select
 	 */
 	@Override
 	public List<OrderDTO> selectOrderAll() throws SearchWrongException {
@@ -56,6 +57,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 	/**
 	 * 기간별 주문 검색(매출액)
+	 * SubQuery
 	 */
 	@Override
 	public int selectTotalSalesByPeriod(int period) throws SearchWrongException {
@@ -99,6 +101,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 	/**
 	 * 모든 메뉴 검색
+	 * select
 	 */
 	@Override
 	public List<ItemDTO> selectItemAll() throws SearchWrongException {
@@ -131,6 +134,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 	/**
 	 * 인기 메뉴 검색(판매 빈도 TOP 3)
+	 * JOIN
 	 */
 	@Override
 	public List<String> selectItemTop3() throws SearchWrongException {
@@ -157,6 +161,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 	/**
 	 * item 테이블에 메뉴 추가
+	 * insert
 	 */
 	@Override
 	public int insertItem(ItemDTO itemDTO) throws DMLException {
@@ -184,6 +189,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 	/**
 	 * 메뉴 이름으로 삭제
+	 * delete
 	 */
 	@Override
 	public int deleteItemByItemName(String itemName) throws DMLException {
@@ -207,6 +213,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 	/**
 	 * 메뉴 재고관리(메뉴 번호로 조회 후 수정)
+	 * update
 	 */
 	@Override
 	public int updateItemStock(ItemDTO itemDTO) throws DMLException {
