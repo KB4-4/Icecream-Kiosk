@@ -1,0 +1,8 @@
+app.mvc.common
+app.mvc.controller
+app.mvc.dao
+app.mvc.dto
+app.mvc.exception
+app.mvc.service
+app.mvc.session
+app.mvc.view
