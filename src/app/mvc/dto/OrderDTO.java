@@ -66,5 +66,5 @@ public class OrderDTO {
 		builder.append(payment);
 		return builder.toString();
 	}
-		
+
 }

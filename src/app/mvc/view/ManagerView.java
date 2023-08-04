@@ -6,15 +6,14 @@ import app.mvc.controller.ManagerController;
 import app.mvc.dto.ItemDTO;
 
 public class ManagerView {
-	static Scanner sc =new Scanner(System.in);
+	static Scanner sc = new Scanner(System.in);
 
 	/**
 	 * 관리자 메뉴
-	 * @author 김현지
 	 */
 
 	public static void managerMenuChoice() {
-		while(true) {
+		while (true) {
 			System.out.println("\n----------------------------------------");
 			System.out.println("  *** 주문 ***");
 			System.out.println("    1. 모든 주문 검색   ");
@@ -67,9 +66,10 @@ public class ManagerView {
 		} // while문
 
 	} // managerMenuChoice()
-	
+
 	/**
 	 * 매출액 검색
+	 * 
 	 * @author 김현지
 	 */
 	public static void searchTotalSales() {
@@ -83,59 +83,57 @@ public class ManagerView {
 				System.out.println("1, 2, 3 중에서 골라주세요.\n");
 				searchTotalSales();
 			}
-			
+
 			ManagerController.selectTotalSalesByPeriod(period);
 		} catch (NumberFormatException e) {
 			System.out.println("숫자만 입력 가능합니다.");
 			searchTotalSales();
 		}
 	}
-	
+
 	/**
 	 * 아이스크림 등록
-	 * @author 김현지
+	 * 
 	 */
 	public static void insertIceCream() {
 		System.out.println("아이스크림 이름을 입력하세요.");
 		String itemName = sc.nextLine();
-		 
+
 		System.out.println("재고를 입력하세요.");
-		 int stock = Integer.parseInt(sc.nextLine());
-		 
+		int stock = Integer.parseInt(sc.nextLine());
+
 		System.out.println("아이스크림 맛을 입력하세요.");
 		String info = sc.nextLine();
-		
+
 		ItemDTO itemDto = new ItemDTO(itemName, 3000, stock, info);
 		ManagerController.insertItem(itemDto);
-		
+
 	}
-	
+
 	/**
 	 * 아이스크림 삭제
-	 * @author 김현지
+	 * 
 	 */
 	public static void deleteIceCream() {
 		System.out.println("삭제할 아이스크림 이름을 입력하세요.");
 		String itemName = sc.nextLine();
 		ManagerController.deleteItemByItemName(itemName);
 	}
-	
+
 	/**
 	 * 아이스크림 재고 관리
-	 * @author 김현지
+	 * 
 	 */
 	public static void updateStock() {
-   	 System.out.println("재고를 추가할 아이스크림 이름을 입력하세요.");
-   	String itemName = sc.nextLine();
-   	 
-   	 System.out.println("추가할 재고량을 입력하세요.");
-   	int stock = Integer.parseInt(sc.nextLine());
-   	
-   	ItemDTO itemDto =  new ItemDTO(itemName, stock);
-   	 
-   	ManagerController.updateItemStock(itemDto);
-    }
-	
-	
-	
+		System.out.println("재고를 추가할 아이스크림 이름을 입력하세요.");
+		String itemName = sc.nextLine();
+
+		System.out.println("추가할 재고량을 입력하세요.");
+		int stock = Integer.parseInt(sc.nextLine());
+
+		ItemDTO itemDto = new ItemDTO(itemName, stock);
+
+		ManagerController.updateItemStock(itemDto);
+	}
+
 }

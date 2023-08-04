@@ -16,19 +16,23 @@ import app.mvc.exception.SearchWrongException;
 public class ManagerDAOImpl implements ManagerDAO {
 	private static ManagerDAO instance = new ManagerDAOImpl();
 
-	private ManagerDAOImpl() {}
+	private ManagerDAOImpl() {
+	}
 
 	public static ManagerDAO getInstance() {
 		return instance;
 	}
 
-	@Override // 1. 모든 주문 검색
+	/**
+	 * 모든 주문 내역 검색
+	 */
+	@Override
 	public List<OrderDTO> selectOrderAll() throws SearchWrongException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<app.mvc.dto.OrderDTO> list = new ArrayList<>();
-		String sql="select order_no, member_no, order_date, payment from orders";
+		String sql = "select order_no, member_no, order_date, payment from orders";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -43,7 +47,6 @@ public class ManagerDAOImpl implements ManagerDAO {
 				list.add(orderdto);
 			}
 		} catch (SQLException e) {
-			//				e.printStackTrace();
 			throw new SearchWrongException("전체 주문 검색에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps, rs);
@@ -51,7 +54,10 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return list;
 	}
 
-	@Override // 2. 기간별 주문 검색(매출액)
+	/**
+	 * 기간별 주문 검색(매출액)
+	 */
+	@Override
 	public int selectTotalSalesByPeriod(int period) throws SearchWrongException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -67,14 +73,12 @@ public class ManagerDAOImpl implements ManagerDAO {
 			// 2. 일주일 동안의 매출
 		} else if (period == 2) {
 			viewDays = 7;
-		// 3. 한달 동안의 매출
+			// 3. 한달 동안의 매출
 		} else if (period == 3) {
 			viewDays = 30;
 		}
-		String sql="select sum(payment)\r\n"
-				+ "from (select order_no, member_no, order_date, payment from orders\r\n"
-				+ "where order_date > sysdate - ?\r\n"
-				+ "order by order_date desc)";
+		String sql = "select sum(payment)\r\n" + "from (select order_no, member_no, order_date, payment from orders\r\n"
+				+ "where order_date > sysdate - ?\r\n" + "order by order_date desc)";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -93,13 +97,16 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return totalSales;
 	}
 
-	@Override // 3. 모든 아이템 검색
+	/**
+	 * 모든 메뉴 검색
+	 */
+	@Override
 	public List<ItemDTO> selectItemAll() throws SearchWrongException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<ItemDTO> list = new ArrayList<>();
-		String sql= "select item_no, item_name, price, stock, info from item order by item_no";
+		String sql = "select item_no, item_name, price, stock, info from item order by item_no";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -115,7 +122,6 @@ public class ManagerDAOImpl implements ManagerDAO {
 				list.add(itemDto);
 			}
 		} catch (SQLException e) {
-//				e.printStackTrace();
 			throw new SearchWrongException("전체 아이스크림 검색에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps, rs);
@@ -123,19 +129,18 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return list;
 	}
 
-	@Override // 4. 인기 아이템 검색(top3)
+	/**
+	 * 인기 메뉴 검색(판매 빈도 TOP 3)
+	 */
+	@Override
 	public List<String> selectItemTop3() throws SearchWrongException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<String> list = new ArrayList<>();
 		String icecreamName = null;
-		String sql = "SELECT a.ITEM_NAME\r\n"
-				+ "FROM ITEM a\r\n"
-				+ "JOIN ORDER_DETAIL od ON a.ITEM_NO = od.ITEM_NO\r\n"
-				+ "GROUP BY a.ITEM_NAME\r\n"
-				+ "ORDER BY SUM(od.QTY) DESC\r\n"
-				+ "FETCH FIRST 3 ROWS ONLY";
+		String sql = "SELECT a.ITEM_NAME\r\n" + "FROM ITEM a\r\n" + "JOIN ORDER_DETAIL od ON a.ITEM_NO = od.ITEM_NO\r\n"
+				+ "GROUP BY a.ITEM_NAME\r\n" + "ORDER BY SUM(od.QTY) DESC\r\n" + "FETCH FIRST 3 ROWS ONLY";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -145,18 +150,20 @@ public class ManagerDAOImpl implements ManagerDAO {
 				list.add(icecreamName);
 			}
 		} catch (SQLException e) {
-			//			e.printStackTrace();
 			throw new SearchWrongException("top3 아이스크림 검색에 오류가 발생했습니다.");
 		}
 		return list;
-	} 
+	}
 
-	@Override // 5. 아이템 추가
+	/**
+	 * item 테이블에 메뉴 추가
+	 */
+	@Override
 	public int insertItem(ItemDTO itemDTO) throws DMLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="insert into item (item_no, item_name, price, stock, info) "
+		String sql = "insert into item (item_no, item_name, price, stock, info) "
 				+ "values (item_seq.nextval, ?, ?, ?, ?)";
 		try {
 			con = DBManager.getConnection();
@@ -175,12 +182,15 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return result;
 	}
 
-	@Override // 6. 아이템 이름으로 삭제
+	/**
+	 * 메뉴 이름으로 삭제
+	 */
+	@Override
 	public int deleteItemByItemName(String itemName) throws DMLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="delete from item where item_name LIKE ?";
+		String sql = "delete from item where item_name LIKE ?";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -188,7 +198,6 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-//			e.printStackTrace();
 			throw new DMLException("아이스크림 메뉴 삭제에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps);
@@ -196,12 +205,15 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return result;
 	}
 
-	@Override // 7. 아이템 아이템번호로 선택한 후 수정(재고관리)
+	/**
+	 * 메뉴 재고관리(메뉴 번호로 조회 후 수정)
+	 */
+	@Override
 	public int updateItemStock(ItemDTO itemDTO) throws DMLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="update item set stock = ?+stock where item_name like ? ";
+		String sql = "update item set stock = ?+stock where item_name like ? ";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -209,8 +221,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 			ps.setString(2, itemDTO.getItemName());
 
 			result = ps.executeUpdate();
-		}  catch (SQLException e) {
-			//e.printStackTrace();
+		} catch (SQLException e) {
 			throw new DMLException("아이스크림 재고관리에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps);
