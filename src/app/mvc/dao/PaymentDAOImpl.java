@@ -283,7 +283,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 			ps = conn.prepareStatement(sql);
 
 			for(int item : cart.keySet()) {
-				System.out.println(item + ": " + cart.get(item));
 				ps.setInt(1, cart.get(item));
 				ps.setInt(2, item);
 				ps.addBatch();
@@ -291,9 +290,6 @@ public class PaymentDAOImpl implements PaymentDAO {
 			}
 
 			result = ps.executeBatch();
-			for(int i : result)
-				System.out.println(i);
-
 		} finally {
 			DBManager.releaseConnection(null, ps, null);
 		}

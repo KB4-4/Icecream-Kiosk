@@ -1,14 +1,12 @@
 package app.mvc.view;
 
+import java.util.HashMap;
+import java.util.Scanner;
+
 import app.mvc.controller.CartController;
 import app.mvc.controller.LoginController;
 import app.mvc.controller.PaymentController;
 import app.mvc.session.Session;
-import app.mvc.controller.CartController;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
 
 public class MenuView {
 	static Scanner sc = new Scanner(System.in);
@@ -41,6 +39,9 @@ public class MenuView {
 			case 100:
 				System.out.println("종료");
 				System.exit(0);
+			case 500:
+				MenuView.manageKiosk();
+				break;
 			default:
 				System.out.println("다시 입력해주세요");
 			}
@@ -155,10 +156,13 @@ public class MenuView {
 			System.out.println("장바구니가 비어있습니다.");
 		} else {
 			System.out.println("-----결제하실 수단을 선택해주세요-----");
-			System.out.println("1. 카드결제   |   2. 포인트결제 ");
-			System.out.println("(단, 보유 포인트가 구매 금액보다 클 때만 포인트 사용 가능합니다)");
+			System.out.println("1. 카드결제   |   2. 포인트결제(단, 보유 포인트가 구매 금액보다 클 때만 포인트 사용 가능합니다)");
 			int selectPayment = Integer.parseInt(sc.nextLine());
 			PaymentController.updateMemberAddPoint(selectPayment);
 		}
+	}
+
+	public static void manageKiosk() {
+		ManagerView.managerMenuChoice();
 	}
 }
