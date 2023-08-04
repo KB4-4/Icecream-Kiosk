@@ -10,6 +10,7 @@ public class ManagerView {
 
 	/**
 	 * 관리자 메뉴
+	 * @author 김현지
 	 */
 
 	public static void managerMenuChoice() {
@@ -25,12 +26,9 @@ public class ManagerView {
 			System.out.println("    5. 아이스크림 추가");
 			System.out.println("    6. 아이스크림 삭제");
 			System.out.println("    7. 아이스크림 수정 (재고추가)");
-//			System.out.println("  *** 멤버 ***");
-//			System.out.println("    8. 전체 멤버 검색");
-//			System.out.println("    9. 특정 멤버 검색");
-//			System.out.println("    10. 멤버 추가");
-//			System.out.println("    11. 멤버 삭제");
-//			System.out.println("    12. 전체 멤버 등급 갱신");
+			System.out.println();
+			System.out.println("  *** 종료 ***");
+			System.out.println("    8. 종료하기");
 			System.out.println("\n----------------------------------------");
 			try {
 				int menu = Integer.parseInt(sc.nextLine());
@@ -56,6 +54,9 @@ public class ManagerView {
 				case 7:
 					updateStock();
 					break;
+				case 8:
+					System.out.println("종료하였습니다.");
+					break;
 				default:
 					System.out.println("잘못 입력했습니다. 다시 입력해주세요.");
 				}
@@ -68,6 +69,7 @@ public class ManagerView {
 	
 	/**
 	 * 매출액 검색
+	 * @author 김현지
 	 */
 	public static void searchTotalSales() {
 		try {
@@ -90,6 +92,7 @@ public class ManagerView {
 	
 	/**
 	 * 아이스크림 등록
+	 * @author 김현지
 	 */
 	public static void insertIceCream() {
 		System.out.println("아이스크림 이름을 입력하세요.");
@@ -108,6 +111,7 @@ public class ManagerView {
 	
 	/**
 	 * 아이스크림 삭제
+	 * @author 김현지
 	 */
 	public static void deleteIceCream() {
 		System.out.println("삭제할 아이스크림 이름을 입력하세요.");
@@ -117,9 +121,10 @@ public class ManagerView {
 	
 	/**
 	 * 아이스크림 재고 관리
+	 * @author 김현지
 	 */
 	public static void updateStock() {
-   	 System.out.println("수정 할 아이스크림 이름을 입력하세요.");
+   	 System.out.println("재고를 추가할 아이스크림 이름을 입력하세요.");
    	String itemName = sc.nextLine();
    	 
    	 System.out.println("추가할 재고량을 입력하세요.");

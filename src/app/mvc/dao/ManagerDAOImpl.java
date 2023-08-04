@@ -67,12 +67,14 @@ public class ManagerDAOImpl implements ManagerDAO {
 			// 2. 일주일 동안의 매출
 		} else if (period == 2) {
 			viewDays = 7;
+		// 3. 한달 동안의 매출
+		} else if (period == 3) {
+			viewDays = 30;
 		}
 		String sql="select sum(payment)\r\n"
 				+ "from (select order_no, member_no, order_date, payment from orders\r\n"
 				+ "where order_date > sysdate - ?\r\n"
 				+ "order by order_date desc)";
-		// ?  viewDays
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -113,7 +115,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 				list.add(itemDto);
 			}
 		} catch (SQLException e) {
-			//	e.printStackTrace();
+//				e.printStackTrace();
 			throw new SearchWrongException("전체 아이스크림 검색에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps, rs);
@@ -156,11 +158,6 @@ public class ManagerDAOImpl implements ManagerDAO {
 		int result = 0;
 		String sql="insert into item (item_no, item_name, price, stock, info) "
 				+ "values (item_seq.nextval, ?, ?, ?, ?)";
-		// 1. itemDTO.getItemNo();
-		// 2. itemDTO.getItemName();
-		// 3. itemDTO.getPrice();
-		// 4. itemDTO.getStock();
-		// 5. itemDTO.getInfo();
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -191,7 +188,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			throw new DMLException("아이스크림 메뉴 삭제에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps);
