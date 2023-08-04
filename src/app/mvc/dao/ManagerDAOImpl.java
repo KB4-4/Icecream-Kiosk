@@ -68,12 +68,14 @@ public class ManagerDAOImpl implements ManagerDAO {
 		// 2. 일주일 동안의 매출
 		} else if (period == 2) {
 			viewDays = 7;
+		// 3. 한달 동안의 매출
+		} else if (period == 3) {
+			viewDays = 30;
 		}
 		String sql="select sum(payment)\r\n"
 				+ "from (select order_no, member_no, order_date, payment from orders\r\n"
 				+ "where order_date > sysdate - ?\r\n"
 				+ "order by order_date desc)";
-		// ?  viewDays
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -98,7 +100,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<ItemDTO> list = new ArrayList<>();
-		String sql= "select item_no, item_name, price, stock, info from item";
+		String sql= "select item_no, item_name, price, stock, info from item order by item_no";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -114,7 +116,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 				list.add(itemDto);
 			}
 		} catch (SQLException e) {
-			//	e.printStackTrace();
+//				e.printStackTrace();
 			throw new SearchWrongException("전체 아이스크림 검색에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps, rs);
@@ -156,11 +158,6 @@ public class ManagerDAOImpl implements ManagerDAO {
 		int result = 0;
 		String sql="insert into item (item_no, item_name, price, stock, info) "
 				+ "values (item_seq.nextval, ?, ?, ?, ?)";
-		// 1. itemDTO.getItemNo();
-		// 2. itemDTO.getItemName();
-		// 3. itemDTO.getPrice();
-		// 4. itemDTO.getStock();
-		// 5. itemDTO.getInfo();
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -191,7 +188,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 			
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			throw new DMLException("아이스크림 메뉴 삭제에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps);
@@ -219,75 +216,6 @@ public class ManagerDAOImpl implements ManagerDAO {
 			DBManager.releaseConnection(con, ps);
 		}
 		return result;
-	}
-
-	@Override // 8. 전체 멤버 검색
-	public List<MemberDTO> selectMemberAll() throws SearchWrongException{
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		List<MemberDTO> list = new ArrayList<>();
-		String sql="select member_no, phone, point, grade from member";
-	}
-
-	@Override // 9. 전화번호로 해당하는 멤버 검색
-	public MemberDTO selectMemberByPhone(String phone) throws SearchWrongException{
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		MemberDTO memberDTO = null;
-		String sql="select member_no, phone, point, grade from member where phone = ?";
-		// ? phone
-	}
-
-	@Override // 10. 멤버 추가
-	public int insertMember(MemberDTO memberdto) throws DMLException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		int result = 0;
-		String sql="insert into member (member_no, phone, point, grade) "
-				+ "values (?, ?, ?, ?, ?)";
-	}
-
-	@Override // 11. 전화번호로 해당하는 멤버 삭제
-	public int deleteMemberByPhone(String phone) throws DMLException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		int result = 0;
-		String sql="delete from member where phone = ?";
-		// ? phone
-	}
-
-	@Override // 12. 멤버 등급 수정, 수정이 완료된 멤버의 수 return
-	public int updateMemberGrade() throws DMLException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		int result = 0;
-		String sql="update member set grade = ?";
-		// ? selectMemberGrade의 결과
-
-	}
-	
-	/**
-	 * 멤버당 총 결제금액 가져오기
-	 */
-	private int selectMemberTotalPayment(Connection con, int memberNo) throws SQLException {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		int totalPayment = 0;
-		String sql = "select sum(payment) from order group by member_no having member_no=?";
-		// ? memberNo
-	}
-	
-	/**
-	 * 결제금액에 해당하는 등급 가져오기
-	 */
-	private String selectMemberGrade(Connection con,  int totalPayment) throws SQLException {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		String memberGrade = null;
-		String sql = "select grade_name from grade where standard between ? - 50000  and ?  + 50000";
-		// ? totalPayment
 	}
 	
 
