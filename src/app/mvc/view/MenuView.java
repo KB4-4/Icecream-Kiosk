@@ -85,7 +85,7 @@ public class MenuView {
 	 * 회원가입
 	 */
 	public static void register() {
-		System.out.println("====== 회원가입 진행 ======");
+		System.out.println("============== 회원가입 진행 =============");
 		System.out.println("====== 가입할 전화번호를 입력하세요 ======");
 		String tempPhone = sc.nextLine();
 		LoginController.inputMemberInsert(tempPhone);
@@ -151,10 +151,14 @@ public class MenuView {
 	 * 결제하기
 	 */
 	public static void orderPayment() {
-		System.out.println("-----결제하실 수단을 선택해주세요-----");
-		System.out.println("1. 카드결제   |   2. 포인트결제 ");
-		System.out.println("(단, 보유 포인트가 구매 금액보다 클 때만 포인트 사용 가능합니다)");
-		int selectPayment = Integer.parseInt(sc.nextLine());
-		PaymentController.updateMemberAddPoint(selectPayment);
+		if(Session.getInstance().getCart().isEmpty()) {
+			System.out.println("장바구니가 비어있습니다.");
+		} else {
+			System.out.println("-----결제하실 수단을 선택해주세요-----");
+			System.out.println("1. 카드결제   |   2. 포인트결제 ");
+			System.out.println("(단, 보유 포인트가 구매 금액보다 클 때만 포인트 사용 가능합니다)");
+			int selectPayment = Integer.parseInt(sc.nextLine());
+			PaymentController.updateMemberAddPoint(selectPayment);
+		}
 	}
 }
