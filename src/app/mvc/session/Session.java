@@ -7,7 +7,9 @@ public class Session {
 
     private static Session instance = new Session();
 
-    private Session() {}
+    private Session() {
+		cart = new HashMap<>();
+	}
     public static Session getInstance(){
         return instance;
     }
@@ -31,5 +33,4 @@ public class Session {
 		Session.instance = instance;
 	}
 
-    
 }

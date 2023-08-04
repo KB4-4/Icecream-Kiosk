@@ -71,21 +71,16 @@ public class ItemDTO {
 	public void setInfo(String info) {
 		this.info = info;
 	}
-
+//	[번호]     [메뉴명(설명)]     [가격]    [재고]
+	
 	@Override
 	public String toString() {
+		
 		StringBuilder builder = new StringBuilder();
-		builder.append("Item [상품번호=");
-		builder.append(itemNo);
-		builder.append(", 상품명=");
-		builder.append(itemName);
-		builder.append(", 가격=");
-		builder.append(price);
-		builder.append(", 구매가능수량=");
-		builder.append(stock);
-		builder.append(", 설명=");
-		builder.append(info);
-		builder.append("]");
-		return builder.toString();
+	    builder.append(String.format("%-5s", itemNo));
+	    builder.append(String.format("%-22s", itemName + "(" + info + ")"));
+	    builder.append(String.format("%-10s", "₩" + price));
+	    builder.append(String.format("%-10s", stock));
+	    return builder.toString();
 	}
 }

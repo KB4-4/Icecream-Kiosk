@@ -14,7 +14,6 @@ import app.mvc.view.SuccessView;
 import java.util.Scanner;
 
 public class LoginController {
-	
     static Session session;
     static Scanner sc = new Scanner(System.in);
     private static MemberService memberService = MemberServiceImpl.getInstance();
@@ -31,10 +30,10 @@ public class LoginController {
     	try {
     		MemberDTO memberDTO = memberService.memberLogin(tempPhone);
     		Session.getInstance().setMember_no(memberDTO.getMemberNo());
-            System.out.println("지금 뷰의 세션 : " + Session.getInstance().getMember_no());
+			MenuView.printUserMenu(Session.getInstance().getMember_no());
     	} catch (SearchWrongException e) {
-    		System.out.println("fail");
     		FailView.errorMessage(e.getMessage());
     	}
+
     }
 }

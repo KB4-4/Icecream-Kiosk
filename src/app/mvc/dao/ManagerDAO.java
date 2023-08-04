@@ -55,6 +55,5 @@ public interface ManagerDAO {
 	 * @author 김현지
 	 */
 	int updateItemStock(ItemDTO itemDTO) throws DMLException;
-	
-	
+
 }
