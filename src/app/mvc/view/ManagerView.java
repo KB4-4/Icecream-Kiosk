@@ -13,22 +13,18 @@ public class ManagerView {
 	 */
 
 	public static void managerMenuChoice() {
-		while (true) {
-			System.out.println("\n----------------------------------------");
-			System.out.println("  *** 주문 ***");
-			System.out.println("    1. 모든 주문 검색   ");
-			System.out.println("    2. 기간별 주문 검색 (총 매출액)");
+		while(true) {
+			System.out.println("=========================================================================");
+			System.out.println("\n-----------------------------주문 관리----------------------------\n");
+			System.out.println("       1. 모든 주문 검색     |     2. 기간별 주문 검색 (총 매출액)");
 			System.out.println();
-			System.out.println("  *** 아이스크림 ***");
-			System.out.println("    3. 모든 아이스크림 검색");
-			System.out.println("    4. 인기 아이스크림 검색 (top3)");
-			System.out.println("    5. 아이스크림 추가");
-			System.out.println("    6. 아이스크림 삭제");
-			System.out.println("    7. 아이스크림 수정 (재고추가)");
-			System.out.println();
-			System.out.println("  *** 종료 ***");
+
+			System.out.println("----------------------------상품 관리----------------------------\n");
+			System.out.println("    3. 모든 아이스크림 검색     |     4. 인기 아이스크림 검색 (top3)");
+			System.out.println("  5. 아이스크림 추가  |  6. 아이스크림 삭제  |  7. 아이스크림 수정 (재고추가)\n");
+			System.out.println("---------------------------관리자 모드 종료-------------------------\n");
 			System.out.println("    8. 종료하기");
-			System.out.println("\n----------------------------------------");
+			System.out.println("\n------------------------------------------------------------------\n");
 			try {
 				int menu = Integer.parseInt(sc.nextLine());
 				switch (menu) {
@@ -74,10 +70,10 @@ public class ManagerView {
 	 */
 	public static void searchTotalSales() {
 		try {
-			System.out.println("총매출을 합산할 최근 기간을 골라주세요 \n");
-			System.out.println("1. 하루");
-			System.out.println("2. 일주일");
-			System.out.println("3. 한달");
+			System.out.println(" -----------------총매출을 합산할 최근 기간을 골라주세요-------------------- ");
+			System.out.println("|          1. 하루        |        2. 일주일        |       3. 한달         |");
+			System.out.println(" ----------------------------------------------------------------------------\n");
+
 			int period = Integer.parseInt(sc.nextLine());
 			if (!(period == 1 || period == 2 || period == 3)) {
 				System.out.println("1, 2, 3 중에서 골라주세요.\n");

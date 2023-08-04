@@ -26,8 +26,7 @@ public class MenuView {
 					+ "                                                                                                                                     \r\n"
 					+ "                                                                                                                                     \r\n"
 					+ "                                                                                                                                     ");
-			System.out.println("1. 회원가입   |   2. 로그인 ");
-
+			System.out.println("======================1. 회원가입   |   2. 로그인======================== ");
 			int menu = Integer.parseInt(sc.nextLine());
 			switch (menu) {
 			case 1:
@@ -50,11 +49,18 @@ public class MenuView {
 
 	public static void printUserMenu(int memberNo) {
 		if (Session.getInstance().getMember_no() == memberNo) {
-			System.out.println("-----" + memberNo + " 로그인 중 -----");
-			System.out.println("[번호]     [메뉴명(설명)]     [가격]    [재고]");
+			System.out.println("\n\n============================회원#" + memberNo + " 주문 시작============================\n");
+			StringBuilder builder = new StringBuilder();
+		    builder.append(String.format("%4s", "번호"));
+		    builder.append(String.format("%7s", "가격"));
+		    builder.append(String.format("%10s", "재고"));
+		    builder.append(String.format("%25s", "메뉴명(설명)"));
+			System.out.println(builder);
 			CartController.showMenuList(); //메뉴 출력
 			while (true) {
-				System.out.println(" 1.장바구니 보기 | 2.장바구니 추가 | 3.장바구니 수정 | 4.결제 | 5.종료 ");
+				System.out.println(" ------------------------------------------------------------------------");
+				System.out.println("| 1.장바구니 보기 | 2.장바구니 추가 | 3.장바구니 수정 | 4.결제 | 5.종료  |");
+				System.out.println(" ------------------------------------------------------------------------");
 				int menu = Integer.parseInt(sc.nextLine());
 				switch (menu) {
 				case 1:
@@ -86,8 +92,8 @@ public class MenuView {
 	 * 회원가입
 	 */
 	public static void register() {
-		System.out.println("============== 회원가입 진행 =============");
-		System.out.println("====== 가입할 전화번호를 입력하세요 ======");
+		System.out.println("============================= 회원가입 진행 =============================");
+		System.out.println("===================== 가입할 전화번호를 입력하세요 ======================");
 		String tempPhone = sc.nextLine();
 		LoginController.inputMemberInsert(tempPhone);
 
@@ -97,8 +103,11 @@ public class MenuView {
 	 * 로그인
 	 */
 	public static void login() {
-		System.out.println("로그인 할 전화번호 입력('-' 포함)");
+		
+		System.out.println("================================ 로그인 =================================");
+		System.out.println(" 로그인 할 전화번호 입력('-' 포함):");
 		String tempPhone = sc.nextLine();
+		System.out.println("=========================================================================");
 		LoginController.inputMemberLogin(tempPhone);
 	}
 
@@ -111,7 +120,7 @@ public class MenuView {
 		Session.getInstance().setMember_no(0);
 		Session.getInstance().setCart(new HashMap<>());
 
-		System.out.println("로그아웃중... 잠시후 메인화면으로 이동됩니다");
+		System.out.println("로그아웃 중... 잠시후 메인화면으로 이동됩니다");
 		MenuView.menu();
 	}
 
@@ -119,7 +128,7 @@ public class MenuView {
 	 * 장바구니 담기
 	 */
 	public static void putCart(int memberNo) {
-		System.out.println("--장바구니 담기 작업 --");
+		System.out.println("\n========================= 장바구니 담기 작업 ============================\n");
 		System.out.print("상품번호 : ");
 		int itemNo = Integer.parseInt(sc.nextLine());
 		System.out.print("수량 : ");
@@ -137,10 +146,10 @@ public class MenuView {
 	}
 
 	/**
-	 * 장바구니 삭제
+	 * 장바구니 수정
 	 */
 	public static void deleteCart(int memberNo) {
-		System.out.println("--장바구니 삭제 작업 --");
+		System.out.println("\n========================= 장바구니 수정 작업 ============================\n");
 		System.out.print("상품번호 : ");
 		int itemNo = Integer.parseInt(sc.nextLine());
 		System.out.print("수량 : ");
@@ -155,7 +164,7 @@ public class MenuView {
 		if(Session.getInstance().getCart().isEmpty()) {
 			System.out.println("장바구니가 비어있습니다.");
 		} else {
-			System.out.println("-----결제하실 수단을 선택해주세요-----");
+			System.out.println("\n======================결제하실 수단을 선택해주세요.======================\n");
 			System.out.println("1. 카드결제   |   2. 포인트결제(단, 보유 포인트가 구매 금액보다 클 때만 포인트 사용 가능합니다)");
 			int selectPayment = Integer.parseInt(sc.nextLine());
 			PaymentController.updateMemberAddPoint(selectPayment);

@@ -56,7 +56,7 @@ public class OrderDTO {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("영수증 [주문번호=");
+		builder.append("주문번호=");
 		builder.append(orderNo);
 		builder.append(", 주문자=");
 		builder.append(memberNo);
