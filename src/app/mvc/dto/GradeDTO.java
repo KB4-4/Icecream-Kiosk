@@ -1,13 +1,14 @@
 package app.mvc.dto;
 
 public class GradeDTO {
-	private int gradeNo; //등급번호
-	private String gradeName; //등급명
-	private double rate; //할인율
-	private int standard; //등급 요건
-	
-	public GradeDTO() {}
-	
+	private int gradeNo; // 등급번호
+	private String gradeName; // 등급명
+	private double rate; // 할인율
+	private int standard; // 등급 요건
+
+	public GradeDTO() {
+	}
+
 	public GradeDTO(int gradeNo, String gradeName, double rate, int standard) {
 		super();
 		this.gradeNo = gradeNo;

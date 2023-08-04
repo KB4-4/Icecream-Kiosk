@@ -1,13 +1,14 @@
 package app.mvc.dto;
 
 public class ReceiptDTO {
-	
+
 	private int orderNo; // 주문번호
-	private String orderDate; // 주문일시 
-	private int point; //잔여포인트
+	private String orderDate; // 주문일시
+	private int point; // 잔여포인트
 	private int payment; // 결제액
-	
-	public ReceiptDTO() {}
+
+	public ReceiptDTO() {
+	}
 
 	public ReceiptDTO(int orderNo, String orderDate, int point, int payment) {
 		super();
@@ -63,7 +64,5 @@ public class ReceiptDTO {
 		builder.append("]");
 		return builder.toString();
 	};
-	
-		
 
 }

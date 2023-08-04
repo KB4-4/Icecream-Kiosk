@@ -1,14 +1,15 @@
 package app.mvc.dto;
 
 public class ItemDTO {
-	private int itemNo; //품번
-	private String itemName; //상품명
-	private int price; //가격
-	private int stock; //재고
-	private String info; //상품 설명 
-	
-	public ItemDTO() {}
-	
+	private int itemNo; // 품번
+	private String itemName; // 상품명
+	private int price; // 가격
+	private int stock; // 재고
+	private String info; // 상품 설명
+
+	public ItemDTO() {
+	}
+
 	public ItemDTO(int itemNo, String itemName, int price, int stock, String info) {
 		super();
 		this.itemNo = itemNo;
@@ -17,7 +18,7 @@ public class ItemDTO {
 		this.stock = stock;
 		this.info = info;
 	}
-	
+
 	public ItemDTO(String itemName, int price, int stock, String info) {
 		super();
 		this.itemName = itemName;
@@ -25,7 +26,7 @@ public class ItemDTO {
 		this.stock = stock;
 		this.info = info;
 	}
-	
+
 	public ItemDTO(String itemName, int stock) {
 		super();
 		this.itemName = itemName;
@@ -75,7 +76,6 @@ public class ItemDTO {
 	
 	@Override
 	public String toString() {
-		
 		StringBuilder builder = new StringBuilder();
 	    builder.append(String.format("%5s", itemNo));
 	    builder.append(String.format("%10s", "₩" + price));

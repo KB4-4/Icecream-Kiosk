@@ -19,7 +19,10 @@ public class ItemDAOImpl implements ItemDAO {
 	public static ItemDAO getInstance() {
 		return instance;
 	}
-	
+
+	/**
+	 * 아이스크림 메뉴 가져오기
+	 */
 	@Override
 	public List<ItemDTO> getItems() throws SQLException {
 		Connection con = null;
@@ -27,11 +30,9 @@ public class ItemDAOImpl implements ItemDAO {
 		ResultSet rs = null;
 		List<ItemDTO> list = new ArrayList<>();
 		String sql = "select * from item order by item_no";
-
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
-
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				ItemDTO itemDto = new ItemDTO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5));
@@ -45,6 +46,9 @@ public class ItemDAOImpl implements ItemDAO {
 		return list;
 	}
 
+	/**
+	 * itemNo에 해당하는 정보 검색(메뉴 재고 파악 목적)
+	 */
 	@Override
 	public ItemDTO itemsSelectByItemsId(int itemNo) throws SQLException {
 		Connection con = null;
@@ -65,6 +69,6 @@ public class ItemDAOImpl implements ItemDAO {
 			DBManager.releaseConnection(con, ps, rs);
 		}
 		return item;
-	}	
-	
+	}
+
 }

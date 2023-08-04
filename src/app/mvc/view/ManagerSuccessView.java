@@ -14,7 +14,7 @@ public class ManagerSuccessView {
 			System.out.println("------------------------------------------------------------------------");
 		}
 	}
-	
+
 	public static void selectItemPrint(List<ItemDTO> list) {
 		System.out.println("----------------------- 아이스크림 종류 ("+list.size()+") 개 ------------------------");
 		for(ItemDTO itemDto : list) {
@@ -22,7 +22,7 @@ public class ManagerSuccessView {
 			System.out.println("------------------------------------------------------------------------");
 		}
 	}
-	
+
 	public static void selectTop3ItemPrint(List<String> list) {
 		System.out.println("----------------------- 아이스크림 Top3 ("+list.size()+") 개 -------------------------");
 		int num = 1;
@@ -31,7 +31,7 @@ public class ManagerSuccessView {
 			System.out.println("------------------------------------------------------------------------");
 		}
 	}
-	
+
 	public static void messagePrint(String message) {
 		System.out.println(message);
 	}

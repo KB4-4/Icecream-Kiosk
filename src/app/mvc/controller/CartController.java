@@ -13,19 +13,25 @@ import app.mvc.view.SuccessView;
 
 public class CartController {
 	private static ItemService itemService = ItemServiceImpl.getInstance();
-	
-	//전체 상품 조회
+
+	/**
+	 * 전체 상품 조회
+	 */
 	public static void showMenuList() {
 		try {
 			List<ItemDTO> list = itemService.showMenuList();
 			SuccessView.printMenuList(list);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
-	
-	
-	// 장바구니 담기
+
+	/**
+	 * 장바구니 담기
+	 * @param memberNo
+	 * @param itemNo
+	 * @param buyCnt
+	 */
 	public static void putCart(int memberNo, int itemNo, int buyCnt) {
 		try {
 			// itemNo 상품 찾기
@@ -56,7 +62,10 @@ public class CartController {
 		}
 	}
 
-	// 장바구니 보기
+	/**
+	 * 장바구니 보기
+	 * @param memberNo
+	 */
 	public static void viewCart(int memberNo) {
 		if (Session.getInstance().getMember_no() == memberNo) {
 			Map<Integer, Integer> cart = Session.getInstance().getCart();
@@ -68,24 +77,27 @@ public class CartController {
 		}
 	}
 
-	//장바구니 수정
+	/**
+	 * 장바구니 수정
+	 * @param itemNo
+	 * @param cnt
+	 */
 	public static void deleteCart(int itemNo, int cnt) {
 		try {
 			Map<Integer, Integer> cart = Session.getInstance().getCart();
 
+			//장바구니가 비어있을때
 			if (cart.isEmpty()) {
 				FailView.errorMessage("장바구니가 비어있습니다.");
 			} else {
-				// cart.remove(itemNo);
 				if (cart.containsKey(itemNo)) {
 					int nowCnt = cart.get(itemNo);
 					int resultCnt = nowCnt - cnt;
 					if (resultCnt < 0) {
 						System.out.println("현재수량보다 삭제할 수량이 많습니다.");
-					} else if (resultCnt == 0) {
-						cart.remove(itemNo);
+					} else if (resultCnt == 0) { //최종 수량이 0이 되면 장바구니에서 key(itemNo)를 삭제
+						cart.remove(itemNo); 
 						SuccessView.messagePrint("장바구니에서 상품을 삭제했습니다.");
-
 					} else {
 						cart.put(itemNo, resultCnt);
 						SuccessView.messagePrint("장바구니에서 " + itemNo + "번을 " + cnt + "개를 삭제했습니다.");
@@ -93,7 +105,6 @@ public class CartController {
 				}
 			}
 		} catch (Exception e) {
-			// e.printStackTrace();
 			FailView.errorMessage(e.getMessage());
 		}
 	}

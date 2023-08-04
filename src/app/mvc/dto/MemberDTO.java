@@ -1,13 +1,14 @@
 package app.mvc.dto;
 
 public class MemberDTO {
-	private int memberNo; //회원번호
-	private String phone; //전화번호
-	private int point; //보유 포인트
-	private int grade; //회원 등급
-	
-	public MemberDTO() {}
-	
+	private int memberNo; // 회원번호
+	private String phone; // 전화번호
+	private int point; // 보유 포인트
+	private int grade; // 회원 등급
+
+	public MemberDTO() {
+	}
+
 	public MemberDTO(int memberNo, String phone, int point, int grade) {
 		super();
 		this.memberNo = memberNo;
@@ -62,5 +63,5 @@ public class MemberDTO {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

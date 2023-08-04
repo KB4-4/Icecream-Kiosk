@@ -10,50 +10,40 @@ import app.mvc.view.SuccessView;
 
 public class PaymentController {
 	private static PaymentService paymentService = PaymentServiceImpl.getInstance();
-	
-	/**
-	 * 영수증 출력
-	 */
-//	public static void selectOrderList(int member_no) {
-//		try {
-//			SuccessView.selectOrderListPrint(paymentService.selectOrderList(member_no), paymentService.searchItemName(Session.cart));
-//		} catch (SearchWrongException e) {
-//			FailView.errorMessage(e.getMessage());
-//		}
-//	}
-	
+
 	/**
 	 * 주문번호 출력
 	 */
 	public static void selectOrderNo(int member_no) {
 		try {
-			SuccessView.messagePrint("주문번호: "+paymentService.selectOrderNo(member_no)+"\n");
+			System.out.println("==================" + "\n");
+			SuccessView.messagePrint("   주문번호: " + paymentService.selectOrderNo(member_no) + "\n");
+			System.out.println("==================");
 		} catch (SearchWrongException e) {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 결제 및 주문 정보 업데이트
 	 */
 	public static void updateMemberAddPoint(int choice) {
 		try {
-			//카드 결제
-			if(choice == 1) {
+			// 카드 결제
+			if (choice == 1) {
 				paymentService.payByCredit();
 				SuccessView.messagePrint("결제가 완료 되었습니다.");
 				PaymentController.selectOrderNo(Session.getInstance().getMember_no());
 			}
-			//포인트 결제
-			else if(choice == 2) {
+			// 포인트 결제
+			else if (choice == 2) {
 				paymentService.payByPoint();
 				SuccessView.messagePrint("결제가 완료 되었습니다.");
 				PaymentController.selectOrderNo(Session.getInstance().getMember_no());
-			}
-			else {
+			} else {
 				FailView.errorMessage("잘못된 입력입니다.");
 			}
-			MenuView.logout(Session.getInstance().getMember_no());
+			MenuView.logout(Session.getInstance().getMember_no()); // 에러 발생시 로그아웃 후 메인화면으로 연결
 		} catch (Exception e) {
 			FailView.errorMessage(e.getMessage());
 		}

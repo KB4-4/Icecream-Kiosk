@@ -1,13 +1,14 @@
 package app.mvc.dto;
 
 public class OrderDetailDTO {
-	private int detailNo; //주문 상세 아이디
-	private int orderNo; //주문번호
-	private int itemNo; //구매한 상품 번호
-	private int qty; //구매 수량
+	private int detailNo; // 주문 상세 아이디
+	private int orderNo; // 주문번호
+	private int itemNo; // 구매한 상품 번호
+	private int qty; // 구매 수량
 
-	public OrderDetailDTO() {}
-	
+	public OrderDetailDTO() {
+	}
+
 	public OrderDetailDTO(int detailNo, int orderNo, int itemNo, int qty) {
 		super();
 		this.detailNo = detailNo;

@@ -19,6 +19,9 @@ public class MemberServiceImpl implements MemberService {
 		return instance;
 	}
 
+	/**
+	 * 회원가입
+	 */
 	@Override
 	public void memberInsert(String phone) throws DMLException {
 		int result = memberDAO.memberInsert(phone);
@@ -28,6 +31,9 @@ public class MemberServiceImpl implements MemberService {
 			System.out.println("회원가입 성공");
 	}
 
+	/**
+	 * 로그인
+	 */
 	@Override
 	public MemberDTO memberLogin(String phone) throws SearchWrongException {
 		MemberDTO memberDTO = memberDAO.memberLogin(phone);
