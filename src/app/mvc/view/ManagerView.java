@@ -55,7 +55,8 @@ public class ManagerView {
 					updateStock();
 					break;
 				case 8:
-					System.out.println("종료하였습니다.");
+					System.out.println("관리자 모드 종료");
+					MenuView.menu();
 					break;
 				default:
 					System.out.println("잘못 입력했습니다. 다시 입력해주세요.");
