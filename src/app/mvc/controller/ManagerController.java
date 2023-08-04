@@ -18,13 +18,14 @@ public class ManagerController {
 	private static ManagerService managerService = ManagerServiceImpl.getInstance();
 	/**
 	 * 1. 모든 주문 검색
+	 * @author 김현지
 	 */
 	public static void selectOrderAll() {
 		try {
 			List<OrderDTO> list = managerService.selectOrderAll();
 			ManagerSuccessView.selectOrderPrint(list);
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		   }
 	}
 	
@@ -33,43 +34,47 @@ public class ManagerController {
 	 * 1. 하루
 	 * 2. 일주일
 	 * 3. 한달
+	 * @author 김현지
 	 */
 	public static void selectTotalSalesByPeriod(int period) {
 		try {
 			int totalSales = managerService.selectTotalSalesByPeriod(period);
 			ManagerSuccessView.messagePrint("해당 기간 동안의 총 매출은 " + totalSales + "원입니다.");
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		   }
 	}
 	
 	// 아이템 관리
 	/**
 	*  3. 모든 아이템 검색
+	*  @author 김현지
 	*/
 	public static void selectItemAll() {
 		try {
 			List<ItemDTO> list = managerService.selectItemAll();
 			ManagerSuccessView.selectItemPrint(list);
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		 }
 	}
 	
 	/**
 	 *  4. 인기 아이템 검색(top3)
+	 *  @author 김현지
 	 */
 	public static void selectItemTop3() {
 		try {
 			List<String> list = managerService.selectItemTop3();
 			ManagerSuccessView.selectTop3ItemPrint(list);
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		 }
 	};
 	
 	/**
 	 * 5. 아이템 추가
+	 * @author 김현지
 	 */
 	public static void insertItem(ItemDTO itemDTO) {
 		try {
@@ -82,6 +87,7 @@ public class ManagerController {
 	
 	/**
 	 * 6. 아이템 이름으로 삭제
+	 * @author 김현지
 	 */
 	public static void deleteItemByItemName(String itemName) {
 		try {
@@ -95,6 +101,7 @@ public class ManagerController {
 	
 	/**
 	 * 7. 아이템 아이템번호로 선택한 후 수정(재고관리)
+	 * @author 김현지
 	 */
 	public static void updateItemStock(ItemDTO itemDTO) {
 		try {
@@ -104,32 +111,6 @@ public class ManagerController {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
-	
-	// 멤버 관리
-	/**
-	* 8. 전체 멤버 검색
-	 */
-	public static void selectMemberAll() {}
-	
-	/**
-	 * 9. 전화번호로 해당하는 멤버 검색
-	 */
-	public static void selectMemberByPhone(String phone) {}
-	
-	/**
-	 * 10. 멤버 추가
-	 */
-	public static void insertMember(MemberDTO memberdto) {}
-	
-	/**
-	 * 11. 전화번호로 해당하는 멤버 삭제
-	 */
-	public static void deleteMemberByPhone(String phone) {}
-	
-	/**
-	 * 12. 멤버 등급 수정
-	 */
-	public static void updateMemberGrade() {}
 	
 	
 }
