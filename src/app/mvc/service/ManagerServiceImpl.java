@@ -83,35 +83,6 @@ public class ManagerServiceImpl implements ManagerService {
 		}
 		return result;
 	}
-
-	@Override
-	public List<MemberDTO> selectMemberAll() throws SearchWrongException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public MemberDTO selectMemberByPhone(String phone) throws SearchWrongException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int insertMember(MemberDTO memberdto) throws DMLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int deleteMemberByPhone(String phone) throws DMLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int updateMemberGrade() throws DMLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }
+
+
