@@ -26,7 +26,7 @@ public class ItemDAOImpl implements ItemDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<ItemDTO> list = new ArrayList<>();
-		String sql = "select * from item";
+		String sql = "select * from item order by item_no";
 
 		try {
 			con = DBManager.getConnection();

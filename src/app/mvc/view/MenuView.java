@@ -7,6 +7,7 @@ import app.mvc.session.Session;
 import app.mvc.controller.CartController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuView {
@@ -14,7 +15,19 @@ public class MenuView {
 
 	public static void menu() {
 		while (true) {
-			System.out.println("=== Sweet Ice Club ===");
+			System.out.println("                                                                                                                                     \r\n"
+					+ "                                                                                                                                     \r\n"
+					+ "  /$$$$$$  /$$      /$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$       /$$$$$$  /$$$$$$  /$$$$$$$$        /$$$$$$  /$$       /$$   /$$ /$$$$$$$ \r\n"
+					+ " /$$__  $$| $$  /$ | $$| $$_____/| $$_____/|__  $$__/      |_  $$_/ /$$__  $$| $$_____/       /$$__  $$| $$      | $$  | $$| $$__  $$\r\n"
+					+ "| $$  \\__/| $$ /$$$| $$| $$      | $$         | $$           | $$  | $$  \\__/| $$            | $$  \\__/| $$      | $$  | $$| $$  \\ $$\r\n"
+					+ "|  $$$$$$ | $$/$$ $$ $$| $$$$$   | $$$$$      | $$           | $$  | $$      | $$$$$         | $$      | $$      | $$  | $$| $$$$$$$ \r\n"
+					+ " \\____  $$| $$$$_  $$$$| $$__/   | $$__/      | $$           | $$  | $$      | $$__/         | $$      | $$      | $$  | $$| $$__  $$\r\n"
+					+ " /$$  \\ $$| $$$/ \\  $$$| $$      | $$         | $$           | $$  | $$    $$| $$            | $$    $$| $$      | $$  | $$| $$  \\ $$\r\n"
+					+ "|  $$$$$$/| $$/   \\  $$| $$$$$$$$| $$$$$$$$   | $$          /$$$$$$|  $$$$$$/| $$$$$$$$      |  $$$$$$/| $$$$$$$$|  $$$$$$/| $$$$$$$/\r\n"
+					+ " \\______/ |__/     \\__/|________/|________/   |__/         |______/ \\______/ |________/       \\______/ |________/ \\______/ |_______/ \r\n"
+					+ "                                                                                                                                     \r\n"
+					+ "                                                                                                                                     \r\n"
+					+ "                                                                                                                                     ");
 			System.out.println("1. 회원가입   |   2. 로그인 ");
 
 			int menu = Integer.parseInt(sc.nextLine());
@@ -35,13 +48,11 @@ public class MenuView {
 	}
 
 	public static void printUserMenu(int memberNo) {
-		while (true) {
-			if (Session.getInstance().getMember_no() == memberNo) {
-
-				System.out.println("-----" + memberNo + " 로그인 중 -----");
-				//메뉴 뿌리기
-				
-				
+		if (Session.getInstance().getMember_no() == memberNo) {
+			System.out.println("-----" + memberNo + " 로그인 중 -----");
+			System.out.println("[번호]     [메뉴명(설명)]     [가격]    [재고]");
+			CartController.showMenuList(); //메뉴 출력
+			while (true) {
 				System.out.println(" 1.장바구니 보기 | 2.장바구니 추가 | 3.장바구니 수정 | 4.결제 | 5.종료 ");
 				int menu = Integer.parseInt(sc.nextLine());
 				switch (menu) {

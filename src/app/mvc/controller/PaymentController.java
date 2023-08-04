@@ -5,6 +5,7 @@ import app.mvc.service.PaymentService;
 import app.mvc.service.PaymentServiceImpl;
 import app.mvc.session.Session;
 import app.mvc.view.FailView;
+import app.mvc.view.MenuView;
 import app.mvc.view.SuccessView;
 
 public class PaymentController {
@@ -52,6 +53,7 @@ public class PaymentController {
 			else {
 				FailView.errorMessage("잘못된 입력입니다.");
 			}
+			MenuView.logout(Session.getInstance().getMember_no());
 		} catch (Exception e) {
 			FailView.errorMessage(e.getMessage());
 		}

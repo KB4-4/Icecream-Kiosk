@@ -21,7 +21,7 @@ public class SuccessView {
 		}
 		System.out.println();
 	}
-
+	
 	public static void printViewCart(int member_no, Map<Integer, Integer> cart) {
 		System.out.println("장바구니가 비어있습니다.");
 
