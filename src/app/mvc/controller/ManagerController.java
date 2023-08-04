@@ -10,7 +10,6 @@ import app.mvc.exception.SearchWrongException;
 import app.mvc.service.ManagerService;
 import app.mvc.service.ManagerServiceImpl;
 import app.mvc.view.FailView;
-import app.mvc.view.ManagerFailView;
 import app.mvc.view.ManagerSuccessView;
 import app.mvc.view.SuccessView;
 
@@ -24,7 +23,7 @@ public class ManagerController {
 			List<OrderDTO> list = managerService.selectOrderAll();
 			ManagerSuccessView.selectOrderPrint(list);
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		   }
 	}
 	
@@ -39,7 +38,7 @@ public class ManagerController {
 			int totalSales = managerService.selectTotalSalesByPeriod(period);
 			ManagerSuccessView.messagePrint("해당 기간 동안의 총 매출은 " + totalSales + "원입니다.");
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		   }
 	}
 	
@@ -52,7 +51,7 @@ public class ManagerController {
 			List<ItemDTO> list = managerService.selectItemAll();
 			ManagerSuccessView.selectItemPrint(list);
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		 }
 	}
 	
@@ -64,7 +63,7 @@ public class ManagerController {
 			List<String> list = managerService.selectItemTop3();
 			ManagerSuccessView.selectTop3ItemPrint(list);
 		} catch (SearchWrongException e) {
-			   ManagerFailView.errorMessage(e.getMessage());
+			   FailView.errorMessage(e.getMessage());
 		 }
 	};
 	

@@ -15,9 +15,9 @@ import app.mvc.exception.SearchWrongException;
 
 public class ManagerDAOImpl implements ManagerDAO {
 	private static ManagerDAO instance = new ManagerDAOImpl();
-	
+
 	private ManagerDAOImpl() {}
-	
+
 	public static ManagerDAO getInstance() {
 		return instance;
 	}
@@ -50,7 +50,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 		}
 		return list;
 	}
- 
+
 	@Override // 2. 기간별 주문 검색(매출액)
 	public int selectTotalSalesByPeriod(int period) throws SearchWrongException {
 		Connection con = null;
@@ -60,11 +60,11 @@ public class ManagerDAOImpl implements ManagerDAO {
 		// 3. 1년 동안의 매출 (기본)
 		int viewDays = 365;
 		int addPayment = 0;
-		
+
 		// 1. 하루 동안의 매출
 		if (period == 1) {
 			viewDays = 1;
-		// 2. 일주일 동안의 매출
+			// 2. 일주일 동안의 매출
 		} else if (period == 2) {
 			viewDays = 7;
 		}
@@ -83,7 +83,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 				totalSales += addPayment;
 			}
 		} catch (SQLException e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 			throw new SearchWrongException("지정한 기간에 대한 게시물 검색에 오류가 발생했습니다.");
 		} finally {
 			DBManager.releaseConnection(con, ps, rs);
@@ -97,7 +97,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<ItemDTO> list = new ArrayList<>();
-		String sql= "select item_no, item_name, price, stock, info from item";
+		String sql= "select item_no, item_name, price, stock, info from item order by item_no";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -108,7 +108,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 				int price = rs.getInt("price");
 				int stock = rs.getInt("stock");
 				String info = rs.getString("info");
-				
+
 				ItemDTO itemDto = new ItemDTO(itemNO, itemName, price, stock, info);
 				list.add(itemDto);
 			}
@@ -120,7 +120,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 		}
 		return list;
 	}
-	
+
 	@Override // 4. 인기 아이템 검색(top3)
 	public List<String> selectItemTop3() throws SearchWrongException {
 		Connection con = null;
@@ -128,11 +128,12 @@ public class ManagerDAOImpl implements ManagerDAO {
 		ResultSet rs = null;
 		List<String> list = new ArrayList<>();
 		String icecreamName = null;
-		String sql = "select item_name from item "
-				+ "where item_no in "
-				+ "(select item_no from "
-				+ "(select item_no from order_detail group by item_no order by sum(qty) desc) "
-				+ "where rownum <= 3)";
+		String sql = "SELECT a.ITEM_NAME\r\n"
+				+ "FROM ITEM a\r\n"
+				+ "JOIN ORDER_DETAIL od ON a.ITEM_NO = od.ITEM_NO\r\n"
+				+ "GROUP BY a.ITEM_NAME\r\n"
+				+ "ORDER BY SUM(od.QTY) DESC\r\n"
+				+ "FETCH FIRST 3 ROWS ONLY";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
@@ -142,7 +143,7 @@ public class ManagerDAOImpl implements ManagerDAO {
 				list.add(icecreamName);
 			}
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//			e.printStackTrace();
 			throw new SearchWrongException("top3 아이스크림 검색에 오류가 발생했습니다.");
 		}
 		return list;
@@ -182,12 +183,12 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="delete from item where item_name = ?";
+		String sql="delete from item where item_name LIKE ?";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 			ps.setString(1, itemName);
-			
+
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -203,13 +204,13 @@ public class ManagerDAOImpl implements ManagerDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int result = 0;
-		String sql="update item set stock = ?+stock where item_name = ? ";
+		String sql="update item set stock = ?+stock where item_name like ? ";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, itemDTO.getStock());
 			ps.setString(2, itemDTO.getItemName());
-			
+
 			result = ps.executeUpdate();
 		}  catch (SQLException e) {
 			//e.printStackTrace();
