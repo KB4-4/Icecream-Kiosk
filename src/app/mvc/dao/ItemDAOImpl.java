@@ -22,6 +22,7 @@ public class ItemDAOImpl implements ItemDAO {
 
 	/**
 	 * 아이스크림 메뉴 가져오기
+	 * select
 	 */
 	@Override
 	public List<ItemDTO> getItems() throws SQLException {
@@ -48,6 +49,7 @@ public class ItemDAOImpl implements ItemDAO {
 
 	/**
 	 * itemNo에 해당하는 정보 검색(메뉴 재고 파악 목적)
+	 * select
 	 */
 	@Override
 	public ItemDTO itemsSelectByItemsId(int itemNo) throws SQLException {

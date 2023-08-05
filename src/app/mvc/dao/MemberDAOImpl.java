@@ -23,6 +23,7 @@ public class MemberDAOImpl implements MemberDAO {
 
 	/**
 	 * 회원가입
+	 * insert
 	 */
 	@Override
 	public int memberInsert(String phone) throws DMLException {
@@ -46,6 +47,7 @@ public class MemberDAOImpl implements MemberDAO {
 
 	/**
 	 * 로그인
+	 * select
 	 */
 	@Override
 	public MemberDTO memberLogin(String phone) throws SearchWrongException {
