@@ -152,7 +152,7 @@ public class MenuView {
 		System.out.println("\n========================= 장바구니 수정 작업 ============================\n");
 		System.out.print("상품번호 : ");
 		int itemNo = Integer.parseInt(sc.nextLine());
-		System.out.print("수량 : ");
+		System.out.print("삭제할 수량 : ");
 		int cnt = Integer.parseInt(sc.nextLine());
 		CartController.deleteCart(itemNo, cnt);
 	}

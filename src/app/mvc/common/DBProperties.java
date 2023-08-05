@@ -5,7 +5,7 @@ package app.mvc.common;
  */
 public interface DBProperties {
 	public static final String DRVIER_NAME = "oracle.jdbc.driver.OracleDriver";
-	String URL = "jdbc:oracle:thin:@10.10.223.14:1521:XE";
-	String USER_ID = "c##ice";
-	String USER_PASS = "kiosk";
+	String URL = "jdbc:oracle:thin:@localhost:1521:XE";
+	String USER_ID = "scott";
+	String USER_PASS = "tiger";
 }
